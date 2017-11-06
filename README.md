@@ -22,7 +22,7 @@ npm run build
 ```
 Include in your project
 ```js
-import { BittrexRxClient, OrderConditionalType, TickIntervalType, TimeInEffectType, MarketOrderType } from '<path to project>';
+import { BittrexRxClient, OrderConditionalTypeValue, TickIntervalValue, TimeInEffectValue, MarketOrderValue } from '<path to project>';
 ```
 ### Api Credentials
 
@@ -32,7 +32,7 @@ The API key has four access permissions they are:
 - **READ INFO** - Grants access to read private trade data such as orders, transaction history, balances, etc...
 - **TRADE LIMIT** - Grants access to limit order functions, which includes creating and canceling limit buy and sell orders.
 - **TRADE MARKET** - Grants access to other order functions, which includes creating and canceling conditional buy and sell orders.
-- **WITHDRAW** -  Grants access to the withdraw function which allows for withdrawals to another address. (This function is not included in this library.)
+- **WITHDRAW** -  Grants access to the withdraw function which allows for withdrawals to another address. (This function is not available via the public interface of this library.)
 
 **For first time use please set API permissions to READ INFO only**.
 
@@ -41,7 +41,7 @@ bittrexRx.apiCredentials("API_KEY", "API_SECRET");
 ```
 ### Example
 ```js
-import { BittrexRxClient, OrderConditionalType, TickIntervalType, TimeInEffectType, MarketOrderType } from 'bittrex-rx';
+import { BittrexRxClient, OrderConditionalTypeValue, TickIntervalValue, TimeInEffectValue, MarketOrderValue } from 'bittrex-rx';
 
 let bittrexRx = new BittrexClient();
 
@@ -428,6 +428,8 @@ bittrexRx.getMarketHistory('BTC-LTC')
 
 ### bittrexRx.getCandle(market: string, tickIntervalType: TickIntervalValue)
 Fetches the OHLC (Open, High, Low, Close) of a market for a given time period.
+
+> **Note:**  This method relies v2 API of Bittrex. Very little is known about this version of the API and is subjected to change without warning!
 
 #### Parameters
 
@@ -875,7 +877,9 @@ null
 ```
 
 ### bittrexRx.setConditionalBuyOrder(market: string, marketOrderType: MarketOrderValue, quantity: number, rate: number, timeInEffect: TimeInEffectValue, conditionType: OrderConditionalTypeValue, target: number)
-Execute buy orders under the conditions specified.
+Executes buy orders under the conditions specified.
+
+> **Note:**  This method relies v2 API of Bittrex. Very little is known about this version of the API and is subjected to change without warning!
 
 #### Parameter
 
@@ -916,7 +920,9 @@ bittrexRx.cancelOrder('BTC-ETH', MarketOrderValue.LIMIT, 0.01162237, 0.04377120,
 ```
 
 ### bittrexRx.setConditionalSellOrder(market: string, marketOrderType: MarketOrderValue, quantity: number, rate: number, timeInEffect: TimeInEffectValue, conditionType: OrderConditionalTypeValue, target: number)
-Execute sell orders under the conditions specified.
+Executes sell orders under the conditions specified.
+
+> **Note:**  This method relies v2 API of Bittrex. Very little is known about this version of the API and is subjected to change without warning!
 
 #### Parameter
 
@@ -983,24 +989,27 @@ bittrexRx.Socket.summaryState()
 
 #### Response
 ```js
-[
-    { 
-        MarketName: 'USDT-BTC',
-        High: 6002,
-        Low: 5410.36691866,
-        Volume: 9899.62086304,
-        Last: 5693.9,
-        BaseVolume: 56483410.89562297,
-        TimeStamp: '2017-10-23T18:25:14.817',
-        Bid: 5689,
-        Ask: 5693.9,
-        OpenBuyOrders: 7611,
-        OpenSellOrders: 3541,
-        PrevDay: 5850,
-        Created: '2015-12-11T06:31:40.633'
-    },
-    ...
-]
+{
+    Nounce: 51705,
+    Deltas: [
+        { 
+            MarketName: 'USDT-BTC',
+            High: 6002,
+            Low: 5410.36691866,
+            Volume: 9899.62086304,
+            Last: 5693.9,
+            BaseVolume: 56483410.89562297,
+            TimeStamp: 2017-10-23T18:25:14.817z,
+            Bid: 5689,
+            Ask: 5693.9,
+            OpenBuyOrders: 7611,
+            OpenSellOrders: 3541,
+            PrevDay: 5850,
+            Created: 2015-12-11T06:31:40.633z
+        },
+        ...
+    ]
+}
 ```
 
 ### bittrexRx.Socket.exchangeState(market: string[])
