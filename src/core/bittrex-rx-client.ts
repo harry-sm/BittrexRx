@@ -1,5 +1,4 @@
 import * as crypto from 'crypto';
-import * as qs from 'querystring';
 import { Observable } from 'rxjs';
 
 import * as Model from '../model';
@@ -235,9 +234,9 @@ export class BittrexRxClient {
         return Math.floor(new Date().getTime() / 1000);
     }
 
-    private getApiSignature(secret: string, url: string, query: Object) {
+    private getApiSignature(secret: string, url: string, queryObject: Object) {
         return crypto.createHmac('sha512', this.credentials.secret)
-            .update(`${url}?${qs.stringify(query)}`)
+            .update(`${url}?${Utilities.generateQuerySting(queryObject)}`)
             .digest('hex');
     }
 
@@ -248,14 +247,14 @@ export class BittrexRxClient {
         let url = `${this.baseUrl}${apiVersion === 1 ? 'v1.1' : 'v2.0'}${urlPath}`;
         let opts = this.requestOptions;
 
-        const query = Utilities.removeUndefined({
+        const queryObject = Utilities.removeUndefined({
             ...queryOptions,
             apikey: this.credentials.key,
             nonce: this.getNonce()
         });
 
-        opts.headers.apisign = this.getApiSignature(this.credentials.secret, url, query);
-        url = `${url}?${qs.stringify(query)}`
+        opts.headers.apisign = this.getApiSignature(this.credentials.secret, url, queryObject);
+        url = `${url}?${Utilities.generateQuerySting(queryObject)}`
 
         return this.http.request(url, opts);
     }
@@ -263,7 +262,7 @@ export class BittrexRxClient {
         let url = `${this.baseUrl}${apiVersion === 1 ? 'v1.1' : 'v2.0'}${urlPath}`;
 
         if (queryOptions) {
-            url = `${url}?${qs.stringify(queryOptions)}`;
+            url = `${url}?${Utilities.generateQuerySting(queryOptions)}`;
         }
         return this.http.request(url);
     };
