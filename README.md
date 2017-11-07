@@ -429,7 +429,7 @@ bittrexRx.getMarketHistory('BTC-LTC')
 ### bittrexRx.getCandle(market: string, tickIntervalType: TickIntervalValue)
 Fetches the OHLC (Open, High, Low, Close) of a market for a given time period.
 
-> **Note:**  This method relies v2 API of Bittrex. Very little is known about this version of the API and is subjected to change without warning!
+> **Note:**  This method relies on the v2 API of Bittrex. Very little is known about this version of the API and is subjected to change without warning!
 
 #### Parameters
 
@@ -879,7 +879,7 @@ null
 ### bittrexRx.setConditionalBuyOrder(market: string, marketOrderType: MarketOrderValue, quantity: number, rate: number, timeInEffect: TimeInEffectValue, conditionType: OrderConditionalTypeValue, target: number)
 Executes buy orders under the conditions specified.
 
-> **Note:**  This method relies v2 API of Bittrex. Very little is known about this version of the API and is subjected to change without warning!
+> **Note:**  This method relies on the v2 API of Bittrex. Very little is known about this version of the API and is subjected to change without warning!
 
 #### Parameter
 
@@ -922,7 +922,7 @@ bittrexRx.cancelOrder('BTC-ETH', MarketOrderValue.LIMIT, 0.01162237, 0.04377120,
 ### bittrexRx.setConditionalSellOrder(market: string, marketOrderType: MarketOrderValue, quantity: number, rate: number, timeInEffect: TimeInEffectValue, conditionType: OrderConditionalTypeValue, target: number)
 Executes sell orders under the conditions specified.
 
-> **Note:**  This method relies v2 API of Bittrex. Very little is known about this version of the API and is subjected to change without warning!
+> **Note:**  This method relies on the v2 API of Bittrex. Very little is known about this version of the API and is subjected to change without warning!
 
 #### Parameter
 
