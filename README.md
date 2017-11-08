@@ -963,6 +963,50 @@ bittrexRx.setConditionalSellOrder('BTC-ETH', MarketOrderValue.LIMIT, 0.01162237,
 ```
 
 
+### customRequest(url: string, queryOptions: Object, useCredentials: Boolean)
+This method is not dependent on the API version and allows for the sending of custom requests.
+
+#### Parameters
+
+| Parameter      | Type    | Example                                              | Description                                                   |
+|----------------|---------|------------------------------------------------------|---------------------------------------------------------------|
+| url            | string  | https://bittrex.com/api/v1.1/public/getmarketsummary | API endpoint.                                                 |
+| queryOptions   | Object  | { market: 'BTC-LTC' }                                | Query string parameters.                                      |
+| useCredentials | Boolean | false                                                | Specify whether the API credentials should be enabled or not. |
+
+#### Return Type
+`Observable<any>`
+
+#### Example
+```js
+bittrexRx.customRequest('https://bittrex.com/api/v1.1/public/getmarketsummary', { market: 'BTC-LTC' }, false)
+    .subscribe(
+        data => {
+            console.log(data);
+        });
+```
+
+#### Response
+```js
+[ 
+    { 
+        MarketName: 'BTC-LTC',
+        High: 0.00908,
+        Low: 0.0076,
+        Volume: 291758.48361243,
+        Last: 0.0084773,
+        BaseVolume: 2464.80235543,
+        TimeStamp: '2017-11-08T00:32:02.203',
+        Bid: 0.00846202,
+        Ask: 0.0084773,
+        OpenBuyOrders: 2964,
+        OpenSellOrders: 13074,
+        PrevDay: 0.00775,
+        Created: '2014-02-13T00:00:00' 
+    } 
+]
+```
+
 ## Web Socket
 
 

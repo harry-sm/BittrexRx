@@ -228,8 +228,12 @@ export class BittrexRxClient {
             .catch(this.catchErrorHandler);
     }
 
+    customRequest(url: string, queryOptions: Object, useCredentials: Boolean): Observable<any> {
+        return this.dispatchRequest(url, queryOptions, useCredentials)
+            .map(data => this.responseHandler(data))
+            .catch(this.catchErrorHandler);
+    }    
     
-
     private getNonce() {
         return Math.floor(new Date().getTime() / 1000);
     }
@@ -240,31 +244,38 @@ export class BittrexRxClient {
             .digest('hex');
     }
 
-    private privateApiCall(urlPath: string, queryOptions = {}, apiVersion = 1) {
-        if (this.credentials.key === undefined) {
-            return Observable.throw('No API Key Found. Please Set API Credentials');
+    private dispatchRequest(url: string, queryOptions, useCredentials: Boolean = false) {
+        if (this.credentials.key === undefined && useCredentials) {
+            return Observable.throw('No API Key Found. Please Set API Credentials.');
         }
-        let url = `${this.baseUrl}${apiVersion === 1 ? 'v1.1' : 'v2.0'}${urlPath}`;
+
         let opts = this.requestOptions;
+        let queryObject = queryOptions;
 
-        const queryObject = Utilities.removeUndefined({
-            ...queryOptions,
-            apikey: this.credentials.key,
-            nonce: this.getNonce()
-        });
+        if (useCredentials) {
+            queryObject = Utilities.removeUndefined({
+                ...queryOptions,
+                apikey: this.credentials.key,
+                nonce: this.getNonce()
+            });
+    
+            opts.headers.apisign = this.getApiSignature(this.credentials.secret, url, queryObject);
+        } 
 
-        opts.headers.apisign = this.getApiSignature(this.credentials.secret, url, queryObject);
-        url = `${url}?${Utilities.generateQuerySting(queryObject)}`
+        if (queryObject) {
+            url = `${url}?${Utilities.generateQuerySting(queryObject)}`;
+        }
 
         return this.http.request(url, opts);
     }
+
+    private privateApiCall(urlPath: string, queryOptions = {}, apiVersion = 1) {
+        let url = `${this.baseUrl}${apiVersion === 1 ? 'v1.1' : 'v2.0'}${urlPath}`;
+        return this.dispatchRequest(url, queryOptions, true);
+    }
     private publicApiCall(urlPath: string, queryOptions?, apiVersion: number = 1, ) {
         let url = `${this.baseUrl}${apiVersion === 1 ? 'v1.1' : 'v2.0'}${urlPath}`;
-
-        if (queryOptions) {
-            url = `${url}?${Utilities.generateQuerySting(queryOptions)}`;
-        }
-        return this.http.request(url);
+        return this.dispatchRequest(url, queryOptions);
     };
 
     private catchErrorHandler(res) {
@@ -273,12 +284,15 @@ export class BittrexRxClient {
         }
         return Observable.throw(res);
     }
-    private responseHandler<T>(res, classType: Model.ClassType<T>): T | any {
-        if (res.success) {
+    private responseHandler<T>(res, classType?: Model.ClassType<T>): T | any {
+        if (res.success && classType) {
             return this.jsc.deserialize(res.result, classType);
         }
+        else if (res.success && !classType) {
+            return res.result;
+        }
         else {
-            throw res;
+            throw res.message;
         }
     };
     private responseVoidHandler(res) {
@@ -286,7 +300,7 @@ export class BittrexRxClient {
             return res.success;
         }
         else {
-            throw res;
+            throw res.message;
         }
     };
 }

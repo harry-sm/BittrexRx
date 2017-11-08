@@ -1,6 +1,6 @@
 import {JsonObject, JsonProperty, Any} from 'json2typescript';
 
-export class ApiResponse<T> {
+export class ApiResponse {
     @JsonProperty("success", Boolean)
     success: Boolean = undefined;
 
