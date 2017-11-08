@@ -4,7 +4,7 @@
 BittrexRx is an Reactive library that was built with TypeScript for the [Bittrex](https://bittrex.com/) API which runs on the node.js platform. I built this library because I couldn't find any other library that uses [rxjs](https://github.com/Reactive-Extensions/RxJS).
 
 ## Basic Usage
-`npm install bittrex-rx`
+`npm install bittrex-rx --save`
 
 ## Advance Usage
 
@@ -22,7 +22,7 @@ npm run build
 ```
 Include in your project
 ```js
-import { BittrexRxClient, OrderConditionalTypeValue, TickIntervalValue, TimeInEffectValue, MarketOrderValue } from '<path to project>';
+import { BittrexRxClient, OrderConditionalTypeValue, TickIntervalValue, TimeInEffectValue, MarketOrderValue, Model } from '<path to project>';
 ```
 ### Api Credentials
 
@@ -41,7 +41,7 @@ bittrexRx.apiCredentials("API_KEY", "API_SECRET");
 ```
 ### Example
 ```js
-import { BittrexRxClient, OrderConditionalTypeValue, TickIntervalValue, TimeInEffectValue, MarketOrderValue } from 'bittrex-rx';
+import { BittrexRxClient, OrderConditionalTypeValue, TickIntervalValue, TimeInEffectValue, MarketOrderValue, Model } from 'bittrex-rx';
 
 let bittrexRx = new BittrexClient();
 
