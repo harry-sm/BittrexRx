@@ -34,7 +34,7 @@
         "url": "https://github.com/harry-sm/BittrexRx/issues"
     },
     "dependencies": {
-        "@types/node": "^7.0.18",
+        "@types/node": "^7.0.48",
         "json2typescript": "^1.0.5",
         "jsonic": "^0.3.0",
         "node-fetch": "^1.7.2",
@@ -45,6 +45,6 @@
         "@types/node-fetch": "^1.6.7",
         "@types/signalr": "^2.2.34",
         "ts-node": "^3.3.0",
-        "typescript": "^2.5.3"
+        "typescript": "^2.6.1"
     }
 }

@@ -3,34 +3,31 @@ import { SocketClient } from '../connection/socket-client';
 import {JsonConvert, ValueCheckingMode} from 'json2typescript';
 import * as Model from '../model';
 import { SocketClientStatus } from '../connection/socket-client-status'
+import { ExchangeState } from '../model';
 
 
 export class BittrexRxSocketClient {
     private socket: SocketClient;
 
-    private listenerData: Observable<any>;
+    private dataStream: Observable<any>;
     constructor() {
         this.socket = new SocketClient('wss://socket.bittrex.com/signalr',  ['CoreHub']);
     }
     get Status(): SocketClientStatus {
         return this.socket.Status();
     }
-    // Observable<Models.MarketSummary>
-    summaryState(): Observable<Model.SummaryStateDelta> {
-        if (this.listenerData === undefined)
-            this.listenerData = this.listen();
 
-        return this.listenerData
-            .filter(data => (data && data.length !== 0))
+    public summaryState(): Observable<Model.SummaryStateDelta> {
+        return this.subscribeToSummaryState()
             .flatMap((d: Model.SummaryState[]) => d)
-            .filter((data) => data.M === 'updateSummaryState')
+            .filter(data => data.M === 'updateSummaryState')
             .map(item => this.convert(item, Model.SummaryState))
             .map((data: Model.SummaryState) => data.A)
             .filter(data => (data && data.length !== 0))
             .mergeMap(arr => arr);
     }
-    exchangeState(markets: string[]): Observable<Model.OrderBookStream> {
-        return this.subscribe(markets)
+    public exchangeState(markets: string[]): Observable<Model.OrderBookStream> {
+        return this.subscribeToExchnageState(markets)
             .filter((data) => data.M === 'updateExchangeState')
             .map(item => this.convert(item, Model.ExchangeState))
             .map((data: Model.ExchangeState) => data.A)
@@ -45,36 +42,54 @@ export class BittrexRxSocketClient {
         return jsc.deserialize(data, dataType);
     }
 
-    private _listen() {
+    private requestDataStream() {
         return this.socket.listener().map(data => {
-            if (data && data.M as any[]) {
+            if (typeof data === 'object' && Object.keys(data).length !== 0 && data.M !== undefined) {
                 return data.M;
             }
         });
     }
 
-    private _listenTo(market: string[]): Observable<any> {
-        return this.socket.listenTo('CoreHub', 'SubscribeToExchangeDeltas', market)
+    private connectToDataStream() {
+        if (this.dataStream === undefined)
+            this.dataStream = this.requestDataStream();
+
+        return this.dataStream;
     }
 
-    private listen() {
-        if (this.listenerData === undefined)
-            this.listenerData = this._listen();
-
-        return this.listenerData;
+    private subscribeWithMarkets(market: string[]): Observable<any> {
+        // queryOrderState, queryExchangeState, SubscribeToExchangeDeltas
+        return this.socket.registerListener('CoreHub', 'SubscribeToExchangeDeltas', market)
+    }
+    private subscribeNoMarkets(): Observable<any> {
+        // subscribeToUserDeltas, querySummaryState, queryBalanceState, SubscribeToSummaryDeltas
+        return this.socket.registerListener('CoreHub', 'SubscribeToSummaryDeltas');
     }
 
-    private subscribe(markets: string[]):Observable<Model.ExchangeState>  {
+    private subscribeToExchnageState(markets: string[]):Observable<Model.ExchangeState>  {
         return Observable.create((observer: Subscriber<any>) => {
-            this._listenTo(markets)
+            this.subscribeWithMarkets(markets)
                 .subscribe(res => {
                     if (res) {
-                        if (this.listenerData === undefined)
-                            this.listenerData = this.listen();
-
-                        this.listenerData
+                        this.connectToDataStream()
                             .filter(data => (data && data.length !== 0))
                             .mergeMap((d: Model.ExchangeState[]) => d)                            
+                            .subscribe(k => observer.next(k));
+                    }
+                    else {
+                        observer.error(res);
+                    }
+                });
+        });
+    }
+
+    private subscribeToSummaryState(): Observable<Model.SummaryState[]> {
+        return Observable.create((observer: Subscriber<any>) => {
+            this.subscribeNoMarkets()
+                .subscribe(res => {
+                    if (res) {
+                        this.connectToDataStream()
+                            .filter(data => (typeof data === 'object' && Object.keys(data).length !== 0))
                             .subscribe(k => observer.next(k));
                     }
                     else {
