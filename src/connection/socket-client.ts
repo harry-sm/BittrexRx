@@ -19,6 +19,7 @@ export class SocketClient {
             opts.websockets_hubs,
             12
         );
+        // this.wsclient.start();
     }
 
     public Status(): SocketClientStatus{
@@ -33,47 +34,27 @@ export class SocketClient {
         });
     }
 
-    public listenTo(hub: string, methodName: string, markets: string[]) {
+    public registerListener(hub: string, methodName: string, markets?: string[]) {
         return Observable.create((observer: Subscriber<any>) => {
             this.wsclient.serviceHandlers.connected = (connection) => {
-                markets.forEach((market) => {
-                    this.wsclient.call(hub, methodName, market).done(function (err, result) {
+                if(markets !== undefined){
+                    markets.forEach((market) => {
+                        this.wsclient.call(hub, methodName, market).done(function (err, result) {
+                            if (err) {
+                                observer.error(err);
+                            }
+                            observer.next(result);
+                        });
+                    });
+                } else {
+                    this.wsclient.call(hub, methodName).done(function (err, result) {
                         if (err) {
                             observer.error(err);
                         }
                         observer.next(result);
                     });
-                });
+                } 
             }
         });
     }
 }
-
-// export class SocketClientStatus {
-//     private wsclient: signalR.client;
-//     constructor(client: signalR.client){
-//         this.wsclient = client;
-//     }
-
-//     public set Connected(fn:Function) {
-//         this.wsclient.serviceHandlers.connected = fn; 
-//     }
-//     public set ConnectionFailed(fn:Function) {
-//         this.wsclient.serviceHandlers.connectFailed = fn; 
-//     }
-//     public set Disconnected(fn:Function) {
-//         this.wsclient.serviceHandlers.disconnected = fn; 
-//     }
-//     public set Error(fn:Function) {
-//         this.wsclient.serviceHandlers.onerror = fn; 
-//     }
-//     public set BindingError(fn:Function) {
-//         this.wsclient.serviceHandlers.bindingError = fn; 
-//     }
-//     public set ConnectionLost(fn:Function) {
-//         this.wsclient.serviceHandlers.connectionLost = fn; 
-//     }
-//     public set Reconnecting(fn:Function) {
-//         this.wsclient.serviceHandlers.reconnecting = fn; 
-//     }
-// }
