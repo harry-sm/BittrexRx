@@ -27,7 +27,7 @@ export class BittrexRxSocketClient {
             .mergeMap(arr => arr);
     }
     public exchangeState(markets: string[]): Observable<Model.OrderBookStream> {
-        return this.subscribeToExchnageState(markets)
+        return this.subscribeToExchangeState(markets)
             .filter((data) => data.M === 'updateExchangeState')
             .map(item => this.convert(item, Model.ExchangeState))
             .map((data: Model.ExchangeState) => data.A)
@@ -66,7 +66,7 @@ export class BittrexRxSocketClient {
         return this.socket.registerListener('CoreHub', 'SubscribeToSummaryDeltas');
     }
 
-    private subscribeToExchnageState(markets: string[]):Observable<Model.ExchangeState>  {
+    private subscribeToExchangeState(markets: string[]):Observable<Model.ExchangeState>  {
         return Observable.create((observer: Subscriber<any>) => {
             this.subscribeWithMarkets(markets)
                 .subscribe(res => {

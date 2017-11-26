@@ -83,8 +83,8 @@ bittrexRx.getMarkets()
     intervalTime(5000)
     .subscribe(
         data => {
-            for (let key in data) {
-                console.log(data[key]);
+            for (let market of data) {
+                console.log(market);
             }
         });
 ```
@@ -109,8 +109,8 @@ Fetches a snapshot of all markets.
 bittrexRx.getMarkets()
     .subscribe(
         data => {
-            for (let key in data) {
-                console.log(data[key]);
+            for (let market of data) {
+                console.log(market);
             }
         });
 ```
@@ -126,7 +126,7 @@ bittrexRx.getMarkets()
         MinTradeSize: 1e-8,
         MarketName: 'BTC-LTC',
         IsActive: true,
-        Created: 2014-02-13T05:00:00.000Z,
+        Created: '2014-02-13T05:00:00.000Z',
         Notice: null,
         IsSponsored: null,
         LogoUrl: 'https://bittrexblobstorage.blob.core.windows.net/public/6defbc41-582d-47a6-bb2e-d0fa88663524.png' 
@@ -152,8 +152,8 @@ Fetches all the market currencies.
 bittrexRx.getCurrencies()
     .subscribe(
         data => {
-            for (let key in data) {
-                console.log(data[key]);
+            for (let currency of data) {
+                console.log(currency);
             }
         });
 ```
@@ -222,8 +222,8 @@ Fetches the summary of each market available.
 bittrexRx.getMarketSummaries()
     .subscribe(
         data => {
-            for (let key in data) {
-                console.log(data[key]);
+            for (let marketSummary of data) {
+                console.log(marketSummary);
             }
         });
 ```
@@ -238,13 +238,13 @@ bittrexRx.getMarketSummaries()
         Volume: 79788.80702209,
         Last: 0.00970283,
         BaseVolume: 791.93512777,
-        TimeStamp: 2017-10-26T01:52:30.430Z,
+        TimeStamp: '2017-10-26T01:52:30.430Z',
         Bid: 0.00970283,
         Ask: 0.00970683,
         OpenBuyOrders: 2143,
         OpenSellOrders: 12833,
         PrevDay: 0.01020636,
-        Created: 2014-02-13T05:00:00.000Z 
+        Created: '2014-02-13T05:00:00.000Z'
     },
     ...
 ]
@@ -280,13 +280,13 @@ bittrexRx.getMarketSummary('BTC-LTC')
     Volume: 79788.80702209,
     Last: 0.00970283,
     BaseVolume: 791.93512777,
-    TimeStamp: 2017-10-26T01:52:30.430Z,
+    TimeStamp: '2017-10-26T01:52:30.430Z',
     Bid: 0.00970283,
     Ask: 0.00970683,
     OpenBuyOrders: 2143,
     OpenSellOrders: 12833,
     PrevDay: 0.01020636,
-    Created: 2014-02-13T05:00:00.000Z 
+    Created: '2014-02-13T05:00:00.000Z' 
 }
 ```
 
@@ -415,7 +415,7 @@ bittrexRx.getMarketHistory('BTC-LTC')
 [
     {
         Id: 85963164,
-        TimeStamp: 2017-10-26T02:00:10.273Z,
+        TimeStamp: '2017-10-26T02:00:10.273Z',
         Quantity: 3.29091587,
         Price: 0.00973473,
         Total: 0.03203617,
@@ -459,7 +459,7 @@ bittrexRx.getCandle('BTC-LTC', TickIntervalType.oneMin)
         L: 0.01149845,
         C: 0.0115379,
         V: 46.98461375,
-        T: 2017-10-16T03:56:00.000Z,
+        T: '2017-10-16T03:56:00.000Z',
         BV: 0.5419376 
     },
     ...
@@ -605,8 +605,8 @@ bittrexRx.getOrder('dc1a6628-7e12-4817-aa16-b5e9860d116c')
     CommissionPaid: 0.00000129,
     Price: 0.00051869,
     PricePerUnit: 0.00000158,
-    Opened: 2017-09-27T02:47:50.740Z,
-    Closed: 2017-09-27T03:39:30.280Z,
+    Opened: '2017-09-27T02:47:50.740Z',
+    Closed: '2017-09-27T03:39:30.280Z',
     IsOpen: false,
     Sentinel: 'Invalid Date',
     CancelInitiated: false,
@@ -644,7 +644,7 @@ bittrexRx.getOrderHistory()
     { 
         OrderUuid: 'dc1a6628-7e12-4817-aa16-b5e9860d116c',
         Exchange: 'BTC-XVG',
-        TimeStamp: 2017-09-27T02:47:50.740Z,
+        TimeStamp: '2017-09-27T02:47:50.740Z',
         OrderType: 'LIMIT_BUY',
         Limit: 0.00000159,
         Quantity: 326.22641509,
@@ -656,7 +656,7 @@ bittrexRx.getOrderHistory()
         Condition: 'NONE',
         ConditionTarget: null,
         ImmediateOrCancel: false,
-        Closed: 2017-09-27T03:39:30.280Z 
+        Closed: '2017-09-27T03:39:30.280Z' 
     },
     ...
 ]
@@ -692,7 +692,7 @@ bittrexRx.getDepositHistory('LTC')
         Amount: 0.02455098,
         Currency: 'BTC',
         Confirmations: 4,
-        LastUpdated: 2017-08-16T22:13:47.783Z,
+        LastUpdated: '2017-08-16T22:13:47.783Z',
         TxId: '8aa448a50b06c0e1436e6e000132d721761e54cac365769ec1136a391df44bfc',
         CryptoAddress: '138TtdZkyMU8GMY8tzpZuc7xsqrb4CwrGE'
     },
@@ -729,7 +729,7 @@ bittrexRx.getWithdrawalHistory('LTC')
         Currency: 'BTC',
         Amount: 0.02039674,
         Address: Invalid Date,
-        Opened: 2017-08-18T08:40:44.737Z,
+        Opened: '2017-08-18T08:40:44.737Z',
         Authorized: true,
         PendingPayment: false,
         TxCost: 0.001,
@@ -839,7 +839,7 @@ bittrexRx.getOpenOrders('BTC-GNT')
         CommissionPaid: 0,
         Price: 0,
         PricePerUnit: null,
-        Opened: 2017-10-24T03:50:26.250Z,
+        Opened: '2017-10-24T03:50:26.250Z',
         Closed: null,
         CancelInitiated: false,
         ImmediateOrCancel: false,
@@ -1043,13 +1043,13 @@ bittrexRx.Socket.summaryState()
             Volume: 9899.62086304,
             Last: 5693.9,
             BaseVolume: 56483410.89562297,
-            TimeStamp: 2017-10-23T18:25:14.817z,
+            TimeStamp: '2017-10-23T18:25:14.817Z',
             Bid: 5689,
             Ask: 5693.9,
             OpenBuyOrders: 7611,
             OpenSellOrders: 3541,
             PrevDay: 5850,
-            Created: 2015-12-11T06:31:40.633z
+            Created: '2015-12-11T06:31:40.633Z'
         },
         ...
     ]
@@ -1103,7 +1103,7 @@ bittrexRx.Socket.exchangeState(['BTC-ETH'])
             OrderType: 'BUY',
             Rate: 0.05382,
             Quantity: 0.42158507,
-            TimeStamp: 2017-10-24T20:16:12.213Z
+            TimeStamp: '2017-10-24T20:16:12.213Z'
         } 
     ] 
 }
