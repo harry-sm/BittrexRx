@@ -1,5 +1,3 @@
-
-
 # BittrexRx
 BittrexRx is an Reactive library that was built with TypeScript for the [Bittrex](https://bittrex.com/) API which runs on the node.js platform. I built this library because I couldn't find any other library that uses [rxjs](https://github.com/Reactive-Extensions/RxJS).
 
@@ -98,8 +96,8 @@ Fetches a snapshot of all markets.
 #### Parameters
 
 | Parameter | Type | Example |
-|-----------|------|---------|
-| none      |   -  |    -    |
+| --------- | ---- | ------- |
+| none      | -    | -       |
 
 #### Return Type
 `Observable<Model.Market[]>`
@@ -141,8 +139,8 @@ Fetches all the market currencies.
 #### Parameters
 
 | Parameter | Type | Example |
-|-----------|------|---------|
-| none      |   -  |    -    |
+| --------- | ---- | ------- |
+| none      | -    | -       |
 
 #### Return Type
 `Observable<Model.Currency[]>`
@@ -181,7 +179,7 @@ Fetches the Tick data which consists of the Bid, Ask and Latest Price the market
 #### Parameters
 
 | Parameter | Type   | Example   |
-|-----------|--------|-----------|
+| --------- | ------ | --------- |
 | market    | string | 'BTC-LTC' |
 
 #### Return Type
@@ -211,8 +209,8 @@ Fetches the summary of each market available.
 #### Parameters
 
 | Parameter | Type | Example |
-|-----------|------|---------|
-| none      |   -  |    -    |
+| --------- | ---- | ------- |
+| none      | -    | -       |
 
 #### Return Type
 `Observable<Model.MarketSummary[]>`
@@ -256,7 +254,7 @@ Fetches the summary of a specific market.
 #### Parameters
 
 | Parameter | Type   | Example   |
-|-----------|--------|-----------|
+| --------- | ------ | --------- |
 | market    | string | 'BTC-LTC' |
 
 #### Return Type
@@ -296,7 +294,7 @@ Fetches both buy and sell orders from the order book for a specific market.
 #### Parameters
 
 | Parameter | Type   | Example   |
-|-----------|--------|-----------|
+| --------- | ------ | --------- |
 | market    | string | 'BTC-LTC' |
 
 #### Return Type
@@ -333,7 +331,7 @@ Fetches buy orders from the order book for a specific market.
 #### Parameters
 
 | Parameter | Type   | Example   |
-|-----------|--------|-----------|
+| --------- | ------ | --------- |
 | market    | string | 'BTC-LTC' |
 
 #### Return Type
@@ -364,7 +362,7 @@ Fetches sell orders from the order book for a specific market.
 #### Parameters
 
 | Parameter | Type   | Example   |
-|-----------|--------|-----------|
+| --------- | ------ | --------- |
 | market    | string | 'BTC-LTC' |
 
 #### Return Type
@@ -395,7 +393,7 @@ Fetches the latest transactions for a specific market.
 #### Parameters
 
 | Parameter | Type   | Example   |
-|-----------|--------|-----------|
+| --------- | ------ | --------- |
 | market    | string | 'BTC-LTC' |
 
 #### Return Type
@@ -433,9 +431,9 @@ Fetches the OHLC (Open, High, Low, Close) of a market for a given time period.
 
 #### Parameters
 
-| Parameter        | Type              | Example                                                  |
-|------------------|-------------------|----------------------------------------------------------|
-| market           |       string      |                        'USDT-BTC'                        |
+| Parameter        | Type              | Example                                  |
+| ---------------- | ----------------- | ---------------------------------------- |
+| market           | string            | 'USDT-BTC'                               |
 | tickIntervalType | TickIntervalValue | TickIntervalValue.oneMin, TickIntervalValue.fiveMin, ... |
 
 #### Return Type
@@ -474,8 +472,8 @@ Fetches all your current currency balances.
 #### Parameters
 
 | Parameter | Type | Example |
-|-----------|------|---------|
-| none      |   -  |    -    |
+| --------- | ---- | ------- |
+| none      | -    | -       |
 
 #### Return Type
 `Observable<Model.Balance[]>`
@@ -512,8 +510,8 @@ Fetches the current balance of a specific currency.
 #### Parameters
 
 | Parameter | Type   | Example |
-|-----------|--------|---------|
-| currency  | string |  'LTC'  |
+| --------- | ------ | ------- |
+| currency  | string | 'LTC'   |
 
 #### Return Type
 `Observable<Model.Balance>`
@@ -544,8 +542,8 @@ Fetches the deposit address of a specific currency.
 #### Parameters
 
 | Parameter | Type   | Example |
-|-----------|--------|---------|
-| currency  | string |  'LTC'  |
+| --------- | ------ | ------- |
+| currency  | string | 'LTC'   |
 
 #### Return Type
 `Observable<Model.DepositAddress>`
@@ -576,7 +574,7 @@ Fetches an order by a specific identifier.
 #### Parameters
 
 | Parameter | Type   | Example                                |
-|-----------|--------|----------------------------------------|
+| --------- | ------ | -------------------------------------- |
 | uuid      | string | '2968d0f9-2854-48e5-bbbf-18a2b7451140' |
 
 #### Example
@@ -623,8 +621,8 @@ Fetches the total transaction history.
 #### Parameters
 
 | Parameter | Type | Example |
-|-----------|------|---------|
-| none      |   -  |    -    |
+| --------- | ---- | ------- |
+| none      | -    | -       |
 
 #### Return Type
 `Observable<Model.OrderHistoryOrderItem[]>`
@@ -669,8 +667,8 @@ Fetches the deposit records of the currency specified.
 #### Parameters
 
 | Parameter | Type   | Example |
-|-----------|--------|---------|
-| currency  | string |  'LTC'  |
+| --------- | ------ | ------- |
+| currency  | string | 'LTC'   |
 
 #### Return Type
 `Observable<Model.Transaction[]>`
@@ -706,8 +704,8 @@ Fetches the withdrawal records of the currency specified.
 #### Parameters
 
 | Parameter | Type   | Example |
-|-----------|--------|---------|
-| currency  | string |  'LTC'  |
+| --------- | ------ | ------- |
+| currency  | string | 'LTC'   |
 
 #### Return Type
 `Observable<Model.Transaction[]>`
@@ -749,8 +747,8 @@ Place buy limit order for a market pair at a rate and quantity specified.
 #### Parameters
 
 | Parameter | Type   | Example    |
-|-----------|--------|------------|
-| market    | string |  'BTC-LTC' |
+| --------- | ------ | ---------- |
+| market    | string | 'BTC-LTC'  |
 | quantity  | number | 0.05849296 |
 | rate      | number | 0.00869720 |
 
@@ -780,7 +778,7 @@ Place sell limit order for a market pair at a rate and quantity specified.
 #### Parameters
 
 | Parameter | Type   | Example    |
-|-----------|--------|------------|
+| --------- | ------ | ---------- |
 | market    | string | 'USDT-BTC' |
 | quantity  | number | 0.0051     |
 | rate      | number | 7000       |
@@ -810,7 +808,7 @@ Fetch orders that has not been executed for specific market.
 #### Parameters
 
 | Parameter | Type   | Example   |
-|-----------|--------|-----------|
+| --------- | ------ | --------- |
 | market    | string | 'BTC-GNT' |
 
 #### Return Type
@@ -856,7 +854,7 @@ Cancel order returns null.
 #### Parameters
 
 | Parameter | Type   | Example                                |
-|-----------|--------|----------------------------------------|
+| --------- | ------ | -------------------------------------- |
 | uuid      | string | '2968d0f9-2854-48e5-bbbf-18a2b7451140' |
 
 #### Return Type
@@ -883,15 +881,15 @@ Executes buy orders under the conditions specified.
 
 #### Parameter
 
-| Parameter       | Type                      | Example                                                                                                             | Description                                                                                                                                                                                                                                                                                                                           |
-|-----------------|---------------------------|---------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| market          |           string          |                                                      'BTC-ETH'                                                      |                                                                                                                                                                                                                                                                                                                                       |
-| marketOrderType | MarketOrderValue          | MarketOrderValue.LIMIT                                                                                              | LIMIT: The order will be executed at a specific price.                                                                                                                                                                                                                                                                                |
-| quantity        | number                    | 0.01162237                                                                                                          |                                                                                                                                                                   -                                                                                                                                                                   |
-| rate            | number                    | 0.04377120                                                                                                          |                                                                                                                                                                   -                                                                                                                                                                   |
+| Parameter       | Type                      | Example                                  | Description                              |
+| --------------- | ------------------------- | ---------------------------------------- | ---------------------------------------- |
+| market          | string                    | 'BTC-ETH'                                |                                          |
+| marketOrderType | MarketOrderValue          | MarketOrderValue.LIMIT                   | LIMIT: The order will be executed at a specific price. |
+| quantity        | number                    | 0.01162237                               | -                                        |
+| rate            | number                    | 0.04377120                               | -                                        |
 | timeInEffect    | TimeInEffectValue         | TimeInEffectValue.IMMEDIATE_OR_CANCEL,<br> TimeInEffectValue.GOOD_TIL_CANCELLED, <br>TimeInEffectValue.FILL_OR_KILL | IMMEDIATE_OR_CANCEL: The order must be executed immediately or else it is canceled. Partial fills are accepted .<br> GOOD_TIL_CANCELLED:,The order is placed until the user cancels it. <br>FILL_OR_KILL: The order must be completed in its entirety. The full quantity of the order at a fixed prices must be executed or canceled. |
-| conditionType   | OrderConditionalTypeValue | OrderConditionalTypeValue.NONE, <br>OrderConditionalTypeValue.GREATER_THAN,<br> OrderConditionalTypeValue.LESS_THAN | GREATER_THAN: The order will be executed if the price of the security is greater than the price specified in the target parameter. <br>LESS_THAN: The order will be executed if the price of the security is less than the price specified in the target parameter.                                                                   |
-| target          | number                    | 0.0                                                                                                                 |                                                                                                                                                                   -                                                                                                                                                                   |                                                                                                               |                                                                                                                                                                                                                                                                                                                                       |
+| conditionType   | OrderConditionalTypeValue | OrderConditionalTypeValue.NONE, <br>OrderConditionalTypeValue.GREATER_THAN,<br> OrderConditionalTypeValue.LESS_THAN | GREATER_THAN: The order will be executed if the price of the security is greater than the price specified in the target parameter. <br>LESS_THAN: The order will be executed if the price of the security is less than the price specified in the target parameter. |
+| target          | number                    | 0.0                                      | -                                        |
 
 
 #### Return Type
@@ -899,7 +897,7 @@ Executes buy orders under the conditions specified.
 
 #### Example
 ```js
-bittrexRx.cancelOrder('BTC-ETH', MarketOrderValue.LIMIT, 0.01162237, 0.04377120, TimeInEffectValue.GOOD_TIL_CANCELLED, OrderConditionalTypeValue.NONE, 0.0)
+bittrexRx.setConditionalBuyOrder('BTC-ETH', MarketOrderValue.LIMIT, 0.01162237, 0.04377120, TimeInEffectValue.GOOD_TIL_CANCELLED, OrderConditionalTypeValue.NONE, 0.0)
     .subscribe(
         data => {
             console.log(data);
@@ -926,16 +924,15 @@ Executes sell orders under the conditions specified.
 
 #### Parameter
 
-| Parameter       | Type                      | Example                                                                                                             | Description                                                                                                                                                                                                                                                                                                                           |
-|-----------------|---------------------------|---------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| market          |           string          |                                                      'USDT-ETH'                                                     |                                                                                                                                                                                                                                                                                                                                       |
-| marketOrderType | MarketOrderValue          | MarketOrderValue.LIMIT                                                                                              | LIMIT: The order will be executed at a specific price.                                                                                                                                                                                                                                                                                |
-| quantity        | number                    | 0.01574783                                                                                                          |                                                                                                                                                                   -                                                                                                                                                                   |
-| rate            | number                    | 400                                                                                                                 |                                                                                                                                                                   -                                                                                                                                                                   |
+| Parameter       | Type                      | Example                                  | Description                              |
+| --------------- | ------------------------- | ---------------------------------------- | ---------------------------------------- |
+| market          | string                    | 'USDT-ETH'                               |                                          |
+| marketOrderType | MarketOrderValue          | MarketOrderValue.LIMIT                   | LIMIT: The order will be executed at a specific price. |
+| quantity        | number                    | 0.01574783                               | -                                        |
+| rate            | number                    | 400                                      | -                                        |
 | timeInEffect    | TimeInEffectValue         | TimeInEffectValue.IMMEDIATE_OR_CANCEL,<br> TimeInEffectValue.GOOD_TIL_CANCELLED, <br>TimeInEffectValue.FILL_OR_KILL | IMMEDIATE_OR_CANCEL: The order must be executed immediately or else it is canceled. Partial fills are accepted .<br> GOOD_TIL_CANCELLED:,The order is placed until the user cancels it. <br>FILL_OR_KILL: The order must be completed in its entirety. The full quantity of the order at a fixed prices must be executed or canceled. |
-| conditionType   | OrderConditionalTypeValue | OrderConditionalTypeValue.NONE, <br>OrderConditionalTypeValue.GREATER_THAN,<br> OrderConditionalTypeValue.LESS_THAN | GREATER_THAN: The order will be executed if the price of the security is greater than the price specified in the target parameter. <br>LESS_THAN: The order will be executed if the price of the security is less than the price specified in the target parameter.                                                                   |
-| target          | number                    | 0.0                                                                                                                 |                                                                                                                                                                   -  
-                                                                                                                                                                 |
+| conditionType   | OrderConditionalTypeValue | OrderConditionalTypeValue.NONE, <br>OrderConditionalTypeValue.GREATER_THAN,<br> OrderConditionalTypeValue.LESS_THAN | GREATER_THAN: The order will be executed if the price of the security is greater than the price specified in the target parameter. <br>LESS_THAN: The order will be executed if the price of the security is less than the price specified in the target parameter. |
+| target          | number                    | 0.0                                      | -                                        |
 
 #### Return Type
 `Observable<Model.ConditionalOrder>`
@@ -968,11 +965,11 @@ This method is not dependent on the API version and allows for the sending of cu
 
 #### Parameters
 
-| Parameter      | Type    | Example                                              | Description                                                   |
-|----------------|---------|------------------------------------------------------|---------------------------------------------------------------|
-| url            | string  | https://bittrex.com/api/v1.1/public/getmarketsummary | API endpoint.                                                 |
-| queryOptions   | Object  | { market: 'BTC-LTC' }                                | Query string parameters.                                      |
-| useCredentials | Boolean | false                                                | Specify whether the API credentials should be enabled or not. |
+| Parameter      | Type    | Example                                  | Description                              |
+| -------------- | ------- | ---------------------------------------- | ---------------------------------------- |
+| url            | string  | https://bittrex.com/api/v1.1/public/getmarketsummary | API endpoint.                            |
+| queryOptions   | Object  | { market: 'BTC-LTC' }                    | Query string parameters.                 |
+| useCredentials | Boolean | false                                    | Specify whether the API credentials should be enabled or not. |
 
 #### Return Type
 `Observable<any>`
@@ -1016,8 +1013,8 @@ Connect to a live stream of market summary data.
 #### Parameters
 
 | Parameter | Type | Example |
-|-----------|------|---------|
-| none      |   -  |    -    |
+| --------- | ---- | ------- |
+| none      | -    | -       |
 
 #### Return Type
 `Observable<Model.SummaryStateDelta>`
@@ -1062,7 +1059,7 @@ Connect to a live stream of specific market data. The data consists of the order
 #### Parameters
 
 | Parameter | Type     | Example      |
-|-----------|----------|--------------|
+| --------- | -------- | ------------ |
 | market    | string[] | ['BTC-L TC'] |
 
 #### Return Type
