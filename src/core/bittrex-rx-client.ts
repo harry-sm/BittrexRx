@@ -98,7 +98,7 @@ export class BittrexRxClient {
     
     // V2 API
     getCandles(market: string,
-        tickIntervalType: TickIntervalValue): Observable<Model.Candle> {
+        tickIntervalType: TickIntervalValue): Observable<Model.Candle[]> {
         // {
         //     _: Date; ((new Date()).getTime()/1000)-(300*5) // start timestamp
         // }
