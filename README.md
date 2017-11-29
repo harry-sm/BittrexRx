@@ -305,8 +305,8 @@ Fetches both buy and sell orders from the order book for a specific market.
 bittrexRx.getOrderBook('BTC-LTC')
     .subscribe(
         data => {
-           for (let key in data.buy) {
-                console.log(data.buy[key]);
+           for (let orderItem of data.buy) {
+                console.log(orderItem);
             }
         });
 ```
@@ -342,8 +342,8 @@ Fetches buy orders from the order book for a specific market.
 bittrexRx.getOrderBuyBook('BTC-LTC')
     .subscribe(
         data => {
-           for (let key in data.buy) {
-                console.log(data.buy[key]);
+           for (let orderItem of data) {
+                console.log(orderItem);
             }
         });
 ```
@@ -373,8 +373,8 @@ Fetches sell orders from the order book for a specific market.
 bittrexRx.getOrderSellBook('BTC-LTC')
     .subscribe(
         data => {
-           for (let key in data.buy) {
-                console.log(data.buy[key]);
+           for (let orderItem of data) {
+                console.log(orderItem);
             }
         });
 ```
@@ -404,7 +404,9 @@ Fetches the latest transactions for a specific market.
 bittrexRx.getMarketHistory('BTC-LTC')
     .subscribe(
         data => {
-            console.log(data);
+            for (let marketHistory of data) {
+                console.log(marketHistory);
+            }
         });
 ```
 
@@ -437,14 +439,16 @@ Fetches the OHLC (Open, High, Low, Close) of a market for a given time period.
 | tickIntervalType | TickIntervalValue | TickIntervalValue.oneMin, TickIntervalValue.fiveMin, ... |
 
 #### Return Type
-`Observable<Model.Candle>`
+`Observable<Model.Candle[]>`
 
 #### Example
 ```js
 bittrexRx.getCandle('BTC-LTC', TickIntervalType.oneMin)
     .subscribe(
         data => {
-            console.log(data);
+            for (let candle of data) {
+                console.log(candle);
+            }
         });
 ```
 
@@ -483,8 +487,8 @@ Fetches all your current currency balances.
 bittrexRx.getBalances()
     .subscribe(
         data => {
-            for (let key in data) {
-                console.log(data[key]);
+            for (let balance of data) {
+                console.log(balance);
             }
         });
 ```
@@ -632,7 +636,9 @@ Fetches the total transaction history.
 bittrexRx.getOrderHistory()
     .subscribe(
         data => {
-            console.log(data);
+           for (let orderHistoryItem of data) {
+                console.log(orderHistoryItem);
+            }
         });
 ```
 
@@ -678,7 +684,9 @@ Fetches the deposit records of the currency specified.
 bittrexRx.getDepositHistory('LTC')
     .subscribe(
         data => {
-            console.log(data);
+           for (let transactionHistory of data) {
+                console.log(transactionHistory);
+            }
         });
 ```
 
@@ -715,7 +723,9 @@ Fetches the withdrawal records of the currency specified.
 bittrexRx.getWithdrawalHistory('LTC')
     .subscribe(
         data => {
-            console.log(data);
+            for (let transactionHistory of data) {
+                console.log(transactionHistory);
+            }
         });
 ```
 
@@ -819,7 +829,9 @@ Fetch orders that has not been executed for specific market.
 bittrexRx.getOpenOrders('BTC-GNT')
     .subscribe(
         data => {
-            console.log(data);
+            for (let openOrder of data) {
+                console.log(openOrder);
+            }
         });
 ```
 
