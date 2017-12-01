@@ -137,9 +137,9 @@ export class BittrexRxClient {
             .catch(this.catchErrorHandler);
     }
 
-    getWithdrawalHistory(currency: string): Observable<Model.Transaction[]> {
+    getWithdrawalHistory(currency: string): Observable<Model.WithdrawalTransaction[]> {
         return this.privateApiCall('/account/getwithdrawalhistory', { currency })
-            .map(data => this.responseHandler(data, Model.Transaction))
+            .map(data => this.responseHandler(data, Model.WithdrawalTransaction))
             .catch(this.catchErrorHandler);
     }
     getDepositHistory(currency: string): Observable<Model.Transaction[]> {

@@ -22,6 +22,6 @@ export * from './ExchangeState';
 export * from './SummaryState';
 
 export * from './ClassType';
-
+export * from './WithdrawalTransaction';
 
 

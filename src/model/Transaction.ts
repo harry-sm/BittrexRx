@@ -4,13 +4,13 @@ import { DateTime } from '../converter';
 
 export class Transaction {
     @JsonProperty('Id', Number, false)
-    PaymentUuid: number = undefined;
+    Id: number = undefined;
 
     @JsonProperty('Amount', Number, false)
     Amount: number = undefined;
 
     @JsonProperty('Currency', String, false)
-    Address: string = undefined;
+    Currency: string = undefined;
 
     @JsonProperty('Confirmations', Number, false)
     Confirmations: number = undefined;
