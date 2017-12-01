@@ -1,5 +1,5 @@
 # BittrexRx
-BittrexRx is an Reactive library that was built with TypeScript for the [Bittrex](https://bittrex.com/) API which runs on the node.js platform. I built this library because I couldn't find any other library that uses [rxjs](https://github.com/Reactive-Extensions/RxJS).
+BittrexRx is an Reactive library that was built with TypeScript for the [Bittrex](https://bittrex.com/) API which runs on the node.js platform. I built this library because I couldn't find any other library that uses [rxjs](https://github.com/Reactive-Extensions/RxJS). I have also built a Reactive library for the .NET platform  which can be found [here](https://github.com/harry-sm/BittrexRxSharp).
 
 ## Basic Usage
 `npm install bittrex-rx --save`
@@ -713,14 +713,14 @@ Fetches the withdrawal records of the currency specified.
 
 | Parameter | Type   | Example |
 | --------- | ------ | ------- |
-| currency  | string | 'LTC'   |
+| currency  | string | 'BTC'   |
 
 #### Return Type
-`Observable<Model.Transaction[]>`
+`Observable<Model.WithdrawalTransaction[]>`
 
 #### Example
 ```js
-bittrexRx.getWithdrawalHistory('LTC')
+bittrexRx.getWithdrawalHistory('BTC')
     .subscribe(
         data => {
             for (let transactionHistory of data) {
@@ -733,17 +733,17 @@ bittrexRx.getWithdrawalHistory('LTC')
 ```js
 [
     {
-        PaymentUuid: 'b14f86bb-b15b-4177-9779-5466eb3a0fbc',
-        Currency: 'BTC',
+        PaymentUuid: "b14f86bb-b15b-4177-9779-5466eb3a0fbc",
+        Currency: "BTC",
         Amount: 0.02039674,
-        Address: Invalid Date,
-        Opened: '2017-08-18T08:40:44.737Z',
+        Address: "1Fo8nz1m4fBb7iDKWDghiA6YSEsg4HZJxD",
+        Opened: "2017-08-18T04:40:44.737",
         Authorized: true,
         PendingPayment: false,
         TxCost: 0.001,
-        TxId: '38a3147f51b8c4798d1a5b3e2712bd7b7177fa99d6457af45a84e56664b6bbc6',
+        TxId: "38a3147f51b8c4798d1a5b3e2712bd7b7177fa99d6457af45a84e56664b6bbc6",
         Canceled: false,
-        InvalidAddress: false 
+        InvalidAddress: false  
     },
     ...
 ]
