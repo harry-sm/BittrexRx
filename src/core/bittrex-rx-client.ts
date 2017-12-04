@@ -8,7 +8,8 @@ import { HttpClient } from '../connection/http-client';
 import { BittrexRxSocketClient } from './bittrex-rx-socket-client';
 import { OrderConditionalTypeValue, TickIntervalValue, TimeInEffectValue, MarketOrderValue } from '../enum';
 
-import { JsonConvert, JsonCustomConvert, ValueCheckingMode } from 'json2typescript';
+import { JsonConvert } from 'json2typescript';
+import { CloudflareAuthenticator } from "../connection/cloudflare-authenticator";
 
 
 interface ApiCredentials {
@@ -26,6 +27,8 @@ export class BittrexRxClient {
     private credentials: Partial<ApiCredentials> = {};
         
     constructor() {
+        CloudflareAuthenticator.init();
+        
         this.http = new HttpClient();
         this.requestOptions = {
             method: 'GET',
