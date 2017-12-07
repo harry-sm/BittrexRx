@@ -23,6 +23,7 @@ export class BittrexRxClient {
     private requestOptions;
     private jsc: JsonConvert;
 
+    private nounceHistory: number[];
     private baseUrl = 'https://bittrex.com/api/';
     private credentials: Partial<ApiCredentials> = {};
         
@@ -52,49 +53,49 @@ export class BittrexRxClient {
 
     // Public Api
     getMarkets(): Observable<Model.Market[]> {
-        return this.publicApiCall('/public/getmarkets')
+        return this.publicApiRequest('/public/getmarkets')
             .map(data => this.responseHandler(data, Model.Market))
             .catch(this.catchErrorHandler);
             
     }
     getCurrencies(): Observable<Model.Currency[]> {
-        return this.publicApiCall('/public/getcurrencies')
+        return this.publicApiRequest('/public/getcurrencies')
             .map(data => this.responseHandler(data, Model.Currency))
             .catch(this.catchErrorHandler);
     }
     getTicker(market: string): Observable<Model.Ticker> {
-        return this.publicApiCall('/public/getticker', { market })
+        return this.publicApiRequest('/public/getticker', { market })
             .map(data => this.responseHandler(data, Model.Ticker))
             .catch(this.catchErrorHandler);
     }
     getMarketSummaries(): Observable<Model.MarketSummary[]> {
-        return this.publicApiCall('/public/getmarketsummaries')
+        return this.publicApiRequest('/public/getmarketsummaries')
             .map(data => this.responseHandler(data, Model.MarketSummary))
             .catch(this.catchErrorHandler);
     }
     getMarketSummary(market: string): Observable<Model.MarketSummary> {
-        return this.publicApiCall('/public/getmarketsummary', { market })
+        return this.publicApiRequest('/public/getmarketsummary', { market })
             .map(data => this.responseHandler(data, Model.MarketSummary))
             .mergeMap(arr => arr)            
             .catch(this.catchErrorHandler);
     }
     getOrderBook(market: string): Observable<Model.OrderBook> {
-        return this.publicApiCall('/public/getorderbook', { market, type:'both'})
+        return this.publicApiRequest('/public/getorderbook', { market, type:'both'})
             .map(data => this.responseHandler(data, Model.OrderBook))
             .catch(this.catchErrorHandler);
     }
     getBuyOrderBook(market: string): Observable<Model.OrderBookOrderItem>{
-        return this.publicApiCall('/public/getorderbook', { market, type: 'buy' })
+        return this.publicApiRequest('/public/getorderbook', { market, type: 'buy' })
             .map(data => this.responseHandler(data, Model.OrderBookOrderItem))
             .catch(this.catchErrorHandler);
     }
     getSellOrderBook(market: string): Observable<Model.OrderBookOrderItem>{
-        return this.publicApiCall('/public/getorderbook', { market, type: 'sell' })
+        return this.publicApiRequest('/public/getorderbook', { market, type: 'sell' })
             .map(data => this.responseHandler(data, Model.OrderBookOrderItem))
             .catch(this.catchErrorHandler);
     }
     getMarketHistory(market: string): Observable<Model.MarketHistory[]> {
-        return this.publicApiCall('/public/getmarkethistory', { market })
+        return this.publicApiRequest('/public/getmarkethistory', { market })
             .map(data => this.responseHandler(data, Model.MarketHistory))
             .catch(this.catchErrorHandler);
     }
@@ -105,7 +106,7 @@ export class BittrexRxClient {
         // {
         //     _: Date; ((new Date()).getTime()/1000)-(300*5) // start timestamp
         // }
-        return this.publicApiCall('/pub/market/GetTicks', {marketName: market, tickInterval: TickIntervalValue[tickIntervalType].toString()}, 2)
+        return this.publicApiRequest('/pub/market/GetTicks', {marketName: market, tickInterval: TickIntervalValue[tickIntervalType].toString()}, 2)
             .map(data => this.responseHandler(data, Model.Candle))
             .catch(this.catchErrorHandler);
     }
@@ -113,45 +114,45 @@ export class BittrexRxClient {
     // Account API 
 
     getBalances(): Observable<Model.Balance[]> {
-        return this.privateApiCall('/account/getbalances')
+        return this.privateApiRequest('/account/getbalances')
             .map(data => this.responseHandler(data, Model.Balance))
             .catch(this.catchErrorHandler);
     }
     getBalance(currency: string): Observable<Model.Balance> {
-        return this.privateApiCall('/account/getbalance', { currency })
+        return this.privateApiRequest('/account/getbalance', { currency })
             .map(data => this.responseHandler(data, Model.Balance))
             .catch(this.catchErrorHandler);
     }
     getDepositAddress(currency: string): Observable<Model.DepositAddress> {
-        return this.privateApiCall('/account/getdepositaddress', { currency })
+        return this.privateApiRequest('/account/getdepositaddress', { currency })
             .map(data => this.responseHandler(data, Model.DepositAddress))
             .catch(this.catchErrorHandler);
     }
 
     getOrder(uuid: string): Observable<Model.Order> {
-        return this.privateApiCall('/account/getorder', { uuid })
+        return this.privateApiRequest('/account/getorder', { uuid })
             .map(data => this.responseHandler(data, Model.Order))
             .catch(this.catchErrorHandler);
     }
 
     getOrderHistory(): Observable<Model.OrderHistoryOrderItem[]> {
-        return this.privateApiCall('/account/getorderhistory')
+        return this.privateApiRequest('/account/getorderhistory')
             .map(data => this.responseHandler(data, Model.OrderHistoryOrderItem))
             .catch(this.catchErrorHandler);
     }
 
     getWithdrawalHistory(currency: string): Observable<Model.WithdrawalTransaction[]> {
-        return this.privateApiCall('/account/getwithdrawalhistory', { currency })
+        return this.privateApiRequest('/account/getwithdrawalhistory', { currency })
             .map(data => this.responseHandler(data, Model.WithdrawalTransaction))
             .catch(this.catchErrorHandler);
     }
     getDepositHistory(currency: string): Observable<Model.Transaction[]> {
-        return this.privateApiCall('/account/getdeposithistory', { currency })
+        return this.privateApiRequest('/account/getdeposithistory', { currency })
             .map(data => this.responseHandler(data, Model.Transaction))
             .catch(this.catchErrorHandler);
     }
     private withdraw(currency: string, quantity: number, address: string, paymentid?: string) {
-        return this.privateApiCall('/account/withdraw', { currency, quantity, address, paymentid })
+        return this.privateApiRequest('/account/withdraw', { currency, quantity, address, paymentid })
             .map(data => this.responseHandler(data, Model.WithdrawalConfirmation))
             .catch(this.catchErrorHandler);
     }
@@ -159,23 +160,23 @@ export class BittrexRxClient {
     // Market Api
 
     setBuyOrder(market: string, quantity: number, rate: number): Observable<Model.OrderResult> {
-        return this.privateApiCall('/market/buylimit', { market, quantity, rate })
+        return this.privateApiRequest('/market/buylimit', { market, quantity, rate })
             .map(data => this.responseHandler(data, Model.OrderResult))
             .catch(this.catchErrorHandler);
     }
 
     setSellOrder(market: string, quantity: number, rate: number): Observable<Model.OrderResult> {
-        return this.privateApiCall('/market/selllimit', { market, quantity, rate })
+        return this.privateApiRequest('/market/selllimit', { market, quantity, rate })
             .map(data => this.responseHandler(data, Model.OrderResult))
             .catch(this.catchErrorHandler);
     }
     cancelOrder(uuid: string): Observable<void> {
-        return this.privateApiCall('/market/cancel', { uuid })
+        return this.privateApiRequest('/market/cancel', { uuid })
             .map(this.responseVoidHandler)
             .catch(this.catchErrorHandler);
     }
     getOpenOrders(market: string): Observable<Model.OpenOrder[]> {
-        return this.privateApiCall('/market/getopenorders', { market })
+        return this.privateApiRequest('/market/getopenorders', { market })
             .map(data => this.responseHandler(data, Model.OpenOrder))
             .catch(this.catchErrorHandler);
     }
@@ -191,7 +192,7 @@ export class BittrexRxClient {
         target: number
     ): Observable<Model.ConditionalOrder>
     {
-        return this.privateApiCall("/key/market/TradeBuy", { 
+        return this.privateApiRequest("/key/market/TradeBuy", { 
                 MarketName: market,
                 orderType: MarketOrderValue[marketOrderType].toString(),
                 quantity,
@@ -216,7 +217,7 @@ export class BittrexRxClient {
         target: number
     ): Observable<Model.ConditionalOrder>
     {
-        return this.privateApiCall("/key/market/TradeSell", { 
+        return this.privateApiRequest("/key/market/TradeSell", { 
                 MarketName: market,
                 orderType: MarketOrderValue[marketOrderType].toString(),
                 quantity,
@@ -235,10 +236,20 @@ export class BittrexRxClient {
         return this.dispatchRequest(url, queryOptions, useCredentials)
             .map(data => this.responseHandler(data))
             .catch(this.catchErrorHandler);
-    }    
+    }
     
+    // Adderesses the possibility of a nounce collision
+    //https://github.com/khuezy/node.bittrex.api/blob/master/node.bittrex.api.js#L48
     private getNonce() {
-        return Math.floor(new Date().getTime() / 1000);
+        let nonce = Math.floor(new Date().getTime() / 1000);
+
+        if (this.nounceHistory.indexOf(nonce) > -1) {
+            return this.getNonce();
+        }
+
+        this.nounceHistory = this.nounceHistory.slice(-50);
+        this.nounceHistory.push(nonce);
+        return nonce;
     }
 
     private getApiSignature(secret: string, url: string, queryObject: Object) {
@@ -272,11 +283,11 @@ export class BittrexRxClient {
         return this.http.request(url, opts);
     }
 
-    private privateApiCall(urlPath: string, queryOptions = {}, apiVersion = 1) {
+    private privateApiRequest(urlPath: string, queryOptions = {}, apiVersion = 1) {
         let url = `${this.baseUrl}${apiVersion === 1 ? 'v1.1' : 'v2.0'}${urlPath}`;
         return this.dispatchRequest(url, queryOptions, true);
     }
-    private publicApiCall(urlPath: string, queryOptions?, apiVersion: number = 1, ) {
+    private publicApiRequest(urlPath: string, queryOptions?, apiVersion: number = 1, ) {
         let url = `${this.baseUrl}${apiVersion === 1 ? 'v1.1' : 'v2.0'}${urlPath}`;
         return this.dispatchRequest(url, queryOptions);
     };
