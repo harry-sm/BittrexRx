@@ -20,7 +20,14 @@ npm run build
 ```
 Include in your project
 ```js
-import { BittrexRxClient, OrderConditionalTypeValue, TickIntervalValue, TimeInEffectValue, MarketOrderValue, Model } from '<path to project>';
+import {
+    BittrexRxClient,
+    OrderConditionalTypeValue,
+    TickIntervalValue,
+    TimeInEffectValue,
+    MarketOrderValue,
+    Model
+} from '<path to project>';
 ```
 ### Api Credentials
 
@@ -39,7 +46,14 @@ bittrexRx.apiCredentials("API_KEY", "API_SECRET");
 ```
 ### Example
 ```js
-import { BittrexRxClient, OrderConditionalTypeValue, TickIntervalValue, TimeInEffectValue, MarketOrderValue, Model } from 'bittrex-rx';
+import {
+    BittrexRxClient,
+    OrderConditionalTypeValue,
+    TickIntervalValue,
+    TimeInEffectValue,
+    MarketOrderValue,
+    Model
+} from 'bittrex-rx';
 
 let bittrexRx = new BittrexClient();
 
@@ -63,9 +77,9 @@ bittrexRx.getMarkets()
 ```
 #### Response
 ```js
-{ 
-    Bid: 0.00000345, 
-    Ask: 0.00000347, 
+{
+    Bid: 0.00000345,
+    Ask: 0.00000347,
     Last: 0.00000349
 }
 ```
@@ -127,7 +141,7 @@ bittrexRx.getMarkets()
         Created: '2014-02-13T05:00:00.000Z',
         Notice: null,
         IsSponsored: null,
-        LogoUrl: 'https://bittrexblobstorage.blob.core.windows.net/public/6defbc41-582d-47a6-bb2e-d0fa88663524.png' 
+        LogoUrl: 'https://bittrexblobstorage.blob.core.windows.net/public/6defbc41-582d-47a6-bb2e-d0fa88663524.png'
     },
     ...
 ]
@@ -196,10 +210,10 @@ bittrexRx.getTicker('BTC-LTC')
 
 #### Response
 ```js
-{ 
-    Bid: 0.00966006, 
-    Ask: 0.00967006, 
-    Last: 0.00966006 
+{
+    Bid: 0.00966006,
+    Ask: 0.00967006,
+    Last: 0.00966006
 }
 ```
 
@@ -271,7 +285,7 @@ bittrexRx.getMarketSummary('BTC-LTC')
 
 #### Response
 ```js
-{ 
+{
     MarketName: 'BTC-LTC',
     High: 0.01023899,
     Low: 0.00966416,
@@ -284,12 +298,12 @@ bittrexRx.getMarketSummary('BTC-LTC')
     OpenBuyOrders: 2143,
     OpenSellOrders: 12833,
     PrevDay: 0.01020636,
-    Created: '2014-02-13T05:00:00.000Z' 
+    Created: '2014-02-13T05:00:00.000Z'
 }
 ```
 
 ### bittrexRx.getOrderBook(market: string)
-Fetches both buy and sell orders from the order book for a specific market. 
+Fetches both buy and sell orders from the order book for a specific market.
 
 #### Parameters
 
@@ -313,10 +327,10 @@ bittrexRx.getOrderBook('BTC-LTC')
 
 #### Response
 ```js
-{ 
+{
     buy: [
         { Quantity: 0.1, Rate: 0.07059785 },
-        ... 
+        ...
     ],
     sell: [
         { Quantity: 1.9251093, Rate: 0.07068 },
@@ -352,12 +366,12 @@ bittrexRx.getOrderBuyBook('BTC-LTC')
 ```js
 [
     { Quantity: 0.1, Rate: 0.07059785 },
-    ... 
+    ...
 ]
 ```
 
 ### bittrexRx.getOrderSellBook(market: string)
-Fetches sell orders from the order book for a specific market. 
+Fetches sell orders from the order book for a specific market.
 
 #### Parameters
 
@@ -383,7 +397,7 @@ bittrexRx.getOrderSellBook('BTC-LTC')
 ```js
 [
     { Quantity: 1.9251093, Rate: 0.07068 },
-    ... 
+    ...
 ]
 ```
 
@@ -420,7 +434,7 @@ bittrexRx.getMarketHistory('BTC-LTC')
         Price: 0.00973473,
         Total: 0.03203617,
         FillType: 'PARTIAL_FILL',
-        OrderType: 'BUY' 
+        OrderType: 'BUY'
     },
     ...
 ]
@@ -455,14 +469,14 @@ bittrexRx.getCandle('BTC-LTC', TickIntervalType.oneMin)
 #### Response
 ```js
 [
-    { 
+    {
         O: 0.01149845,
         H: 0.0115379,
         L: 0.01149845,
         C: 0.0115379,
         V: 46.98461375,
         T: '2017-10-16T03:56:00.000Z',
-        BV: 0.5419376 
+        BV: 0.5419376
     },
     ...
 ]
@@ -496,12 +510,12 @@ bittrexRx.getBalances()
 #### Response
 ```js
 [
-    { 
+    {
         Currency: 'LTC',
         Balance: 0,
         Available: 0,
         Pending: 0,
-        CryptoAddress: null 
+        CryptoAddress: null
     },
     ...
 ]
@@ -531,12 +545,12 @@ bittrexRx.getBalance('LTC')
 
 #### Response
 ```js
-{ 
+{
     Currency: 'LTC',
     Balance: 0,
     Available: 0,
     Pending: 0,
-    CryptoAddress: null 
+    CryptoAddress: null
 }
 ```
 
@@ -563,7 +577,7 @@ bittrexRx.getBalance('LTC')
 
 #### Response
 ```js
-{ 
+{
     Currency: 'LTC',
     Address: ''
 }
@@ -592,7 +606,7 @@ bittrexRx.getOrder('dc1a6628-7e12-4817-aa16-b5e9860d116c')
 
 #### Response
 ```js
-{ 
+{
     AccountId: null,
     OrderUuid: 'dc1a6628-7e12-4817-aa16-b5e9860d116c',
     Exchange: 'BTC-XVG',
@@ -645,7 +659,7 @@ bittrexRx.getOrderHistory()
 #### Response
 ```js
 [
-    { 
+    {
         OrderUuid: 'dc1a6628-7e12-4817-aa16-b5e9860d116c',
         Exchange: 'BTC-XVG',
         TimeStamp: '2017-09-27T02:47:50.740Z',
@@ -660,7 +674,7 @@ bittrexRx.getOrderHistory()
         Condition: 'NONE',
         ConditionTarget: null,
         ImmediateOrCancel: false,
-        Closed: '2017-09-27T03:39:30.280Z' 
+        Closed: '2017-09-27T03:39:30.280Z'
     },
     ...
 ]
@@ -693,7 +707,7 @@ bittrexRx.getDepositHistory('LTC')
 #### Response
 ```js
 [
-    { 
+    {
         Id: 26972433,
         Amount: 0.02455098,
         Currency: 'BTC',
@@ -743,7 +757,7 @@ bittrexRx.getWithdrawalHistory('BTC')
         TxCost: 0.001,
         TxId: "38a3147f51b8c4798d1a5b3e2712bd7b7177fa99d6457af45a84e56664b6bbc6",
         Canceled: false,
-        InvalidAddress: false  
+        InvalidAddress: false
     },
     ...
 ]
@@ -777,7 +791,7 @@ bittrexRx.setBuyOrder('BTC-LTC', 0.05849296, 0.00869720)
 
 #### Response
 ```js
-{    
+{
     uuid: '54a1cc8f-10dc-49de-bb52-f5d70b1c84ec'
 }
 ```
@@ -838,7 +852,7 @@ bittrexRx.getOpenOrders('BTC-GNT')
 #### Response
 ```js
 [
-    { 
+    {
         Uuid: null,
         OrderUuid: '9a6e6f63-de19-475a-ad81-c85129681253',
         Exchange: 'BTC-GNT',
@@ -855,7 +869,7 @@ bittrexRx.getOpenOrders('BTC-GNT')
         ImmediateOrCancel: false,
         IsConditional: false,
         Condition: 'NONE',
-        ConditionTarget: null 
+        ConditionTarget: null
     }
 ]
 ```
@@ -918,7 +932,7 @@ bittrexRx.setConditionalBuyOrder('BTC-ETH', MarketOrderValue.LIMIT, 0.01162237, 
 
 #### Response
 ```js
-{   
+{
     OrderId: 'ac983afd-6852-478e-8415-d6e30615ea9c',
     MarketName: 'BTC-ETH',
     MarketCurrency: 'ETH',
@@ -960,7 +974,7 @@ bittrexRx.setConditionalSellOrder('BTC-ETH', MarketOrderValue.LIMIT, 0.01162237,
 
 #### Response
 ```js
-{    
+{
     OrderId: 'b27a6b86-bae6-4b04-be2d-6726e717e53e',
     MarketName: 'USDT-ETH',
     MarketCurrency: 'ETH',
@@ -968,7 +982,7 @@ bittrexRx.setConditionalSellOrder('BTC-ETH', MarketOrderValue.LIMIT, 0.01162237,
     OrderType: 'LIMIT',
     Quantity: 0.01574783,
     Rate: 400
-} 
+}
 ```
 
 
@@ -997,8 +1011,8 @@ bittrexRx.customRequest('https://bittrex.com/api/v1.1/public/getmarketsummary', 
 
 #### Response
 ```js
-[ 
-    { 
+[
+    {
         MarketName: 'BTC-LTC',
         High: 0.00908,
         Low: 0.0076,
@@ -1011,8 +1025,8 @@ bittrexRx.customRequest('https://bittrex.com/api/v1.1/public/getmarketsummary', 
         OpenBuyOrders: 2964,
         OpenSellOrders: 13074,
         PrevDay: 0.00775,
-        Created: '2014-02-13T00:00:00' 
-    } 
+        Created: '2014-02-13T00:00:00'
+    }
 ]
 ```
 
@@ -1045,7 +1059,7 @@ bittrexRx.Socket.summaryState()
 {
     Nounce: 51705,
     Deltas: [
-        { 
+        {
             MarketName: 'USDT-BTC',
             High: 6002,
             Low: 5410.36691866,
@@ -1088,7 +1102,7 @@ bittrexRx.Socket.exchangeState(['BTC-ETH'])
 
 #### Response
 ```js
-{ 
+{
     MarketName: 'BTC-ETH',
     Nounce: 40393,
     Buys:[
@@ -1099,22 +1113,22 @@ bittrexRx.Socket.exchangeState(['BTC-ETH'])
         { Type: 2, Rate: 0.05153143, Quantity: 0.04369078 },
         { Type: 2, Rate: 0.05135616, Quantity: 0.0438399 },
         { Type: 2, Rate: 0.05118088, Quantity: 0.04399003 },
-        { Type: 2, Rate: 0.0510056, Quantity: 0.0441412 } 
+        { Type: 2, Rate: 0.0510056, Quantity: 0.0441412 }
     ],
-    Sells: [ 
+    Sells: [
         { Type: 2, Rate: 0.05382, Quantity: 10.18061112 },
         { Type: 2, Rate: 0.05434562, Quantity: 4.83608199 },
         { Type: 0, Rate: 0.05450161, Quantity: 8.71091193 },
-        { Type: 1, Rate: 0.05450262, Quantity: 0 } 
+        { Type: 1, Rate: 0.05450262, Quantity: 0 }
     ],
-    Fills: [ 
-        { 
+    Fills: [
+        {
             OrderType: 'BUY',
             Rate: 0.05382,
             Quantity: 0.42158507,
             TimeStamp: '2017-10-24T20:16:12.213Z'
-        } 
-    ] 
+        }
+    ]
 }
 ```
 
