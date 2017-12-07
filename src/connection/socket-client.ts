@@ -12,12 +12,20 @@ export class SocketClient {
     private cfAuth: CloudflareAuthenticator;
     private isAuthenticated: Subject<Boolean> = new Subject<Boolean>();
 
+    private baseUrl: string;
+    private hubs: string[];
+
     constructor(baseUrl?: string, hubs?: string[]) {
         this.cfAuth = CloudflareAuthenticator.init();
         this.constructorAsync(baseUrl, hubs);
+        this.baseUrl = baseUrl;
+        this.hubs = hubs;
     }
 
     constructorAsync(baseUrl?: string, hubs?: string[]) {
+        //force end of connection.
+        (this.wsclient && this.wsclient.end());
+
         this.wsclient = new signalR.client(
             baseUrl,
             hubs,
@@ -44,14 +52,19 @@ export class SocketClient {
                     this.isAuthenticated.next(false);
                 };
             },
-            () => {              
-                
+            () => {
+
             });
-        
+
         this.wsclient.serviceHandlers.reconnecting = function (retryData) {
             console.log("Reconnecting...");
-            return false;
+            this.constructorAsync(this.baseUrl, this.hubs);
+            return true;
         };
+        this.wsclient.serviceHandlers.disconnected = () => {
+            console.log('Restarting Connection');
+            this.constructorAsync(this.baseUrl, this.hubs);
+        }
     }
 
     public Status(): SocketClientStatus {
