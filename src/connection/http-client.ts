@@ -38,15 +38,15 @@ export class HttpClient {
             CloudflareAuthenticator.init().getCredentials()
                 .subscribe(data => {
                     options.headers = (options.headers !== undefined) ? options.headers : {};
-                    
+
                     options.headers['User-Agent'] = data.userAgent;
                     options.headers['cookie'] = data.cookie;
-                    
+
                     console.log("HTTP Authenticated!");
                     this._request(url, options).subscribe(k => observer.next(k));
                 },
                 err => {
-                    console.warn("HTTP CloudFalre Authenticcation Failed!");
+                    console.warn("HTTP CloudFalre Authentication Failed!");
                     this._request(url, options).subscribe(k => observer.next(k));
                 });
         });
