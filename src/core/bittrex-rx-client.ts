@@ -26,10 +26,10 @@ export class BittrexRxClient {
     private nounceHistory: number[];
     private baseUrl = 'https://bittrex.com/api/';
     private credentials: Partial<ApiCredentials> = {};
-        
+
     constructor() {
         CloudflareAuthenticator.init();
-        
+
         this.http = new HttpClient();
         this.requestOptions = {
             method: 'GET',
@@ -41,6 +41,10 @@ export class BittrexRxClient {
 
     get Socket():BittrexRxSocketClient {
         return new BittrexRxSocketClient();
+    }
+
+    config(baseUrl){
+        this.baseUrl = baseUrl;
     }
 
     apiCredentials(key: string, secret: string) {
@@ -56,7 +60,7 @@ export class BittrexRxClient {
         return this.publicApiRequest('/public/getmarkets')
             .map(data => this.responseHandler(data, Model.Market))
             .catch(this.catchErrorHandler);
-            
+
     }
     getCurrencies(): Observable<Model.Currency[]> {
         return this.publicApiRequest('/public/getcurrencies')
@@ -76,7 +80,7 @@ export class BittrexRxClient {
     getMarketSummary(market: string): Observable<Model.MarketSummary> {
         return this.publicApiRequest('/public/getmarketsummary', { market })
             .map(data => this.responseHandler(data, Model.MarketSummary))
-            .mergeMap(arr => arr)            
+            .mergeMap(arr => arr)
             .catch(this.catchErrorHandler);
     }
     getOrderBook(market: string): Observable<Model.OrderBook> {
@@ -99,7 +103,7 @@ export class BittrexRxClient {
             .map(data => this.responseHandler(data, Model.MarketHistory))
             .catch(this.catchErrorHandler);
     }
-    
+
     // V2 API
     getCandles(market: string,
         tickIntervalType: TickIntervalValue): Observable<Model.Candle[]> {
@@ -111,7 +115,7 @@ export class BittrexRxClient {
             .catch(this.catchErrorHandler);
     }
 
-    // Account API 
+    // Account API
 
     getBalances(): Observable<Model.Balance[]> {
         return this.privateApiRequest('/account/getbalances')
@@ -192,14 +196,14 @@ export class BittrexRxClient {
         target: number
     ): Observable<Model.ConditionalOrder>
     {
-        return this.privateApiRequest("/key/market/TradeBuy", { 
+        return this.privateApiRequest("/key/market/TradeBuy", {
                 MarketName: market,
                 orderType: MarketOrderValue[marketOrderType].toString(),
                 quantity,
                 rate,
                 timeInEffect: TimeInEffectValue[timeInEffect].toString(),
                 conditionType: OrderConditionalTypeValue[conditionType].toString(),
-                target 
+                target
             },
             2
             )
@@ -217,14 +221,14 @@ export class BittrexRxClient {
         target: number
     ): Observable<Model.ConditionalOrder>
     {
-        return this.privateApiRequest("/key/market/TradeSell", { 
+        return this.privateApiRequest("/key/market/TradeSell", {
                 MarketName: market,
                 orderType: MarketOrderValue[marketOrderType].toString(),
                 quantity,
                 rate,
                 timeInEffect: TimeInEffectValue[timeInEffect].toString(),
                 conditionType: OrderConditionalTypeValue[conditionType].toString(),
-                target 
+                target
             },
             2
             )
@@ -237,7 +241,7 @@ export class BittrexRxClient {
             .map(data => this.responseHandler(data))
             .catch(this.catchErrorHandler);
     }
-    
+
     // Adderesses the possibility of a nounce collision
     //https://github.com/khuezy/node.bittrex.api/blob/master/node.bittrex.api.js#L48
     private getNonce() {
@@ -260,7 +264,7 @@ export class BittrexRxClient {
 
     private dispatchRequest(url: string, queryOptions, useCredentials: Boolean = false) {
         if (this.credentials.key === undefined && useCredentials) {
-            return Observable.throw('No API Key Found. Please Set API Credentials.');
+            return Observable.throw(new Error('No API Key Found. Please Set API Credentials.'));
         }
 
         let opts = this.requestOptions;
@@ -272,9 +276,9 @@ export class BittrexRxClient {
                 apikey: this.credentials.key,
                 nonce: this.getNonce()
             });
-    
+
             opts.headers.apisign = this.getApiSignature(this.credentials.secret, url, queryObject);
-        } 
+        }
 
         if (queryObject) {
             url = `${url}?${Utilities.generateQuerySting(queryObject)}`;
@@ -293,20 +297,24 @@ export class BittrexRxClient {
     };
 
     private catchErrorHandler(res) {
-        if (res.status === 401 || res.status === 403 || res.status === 404) {
-            return Observable.throw('NOT FOUND CHECK URL')
-        }
         return Observable.throw(res);
     }
-    private responseHandler<T>(res, classType?: Model.ClassType<T>): T | any {
+    private responseHandler<T>(res: Model.ApiResponse, classType?: Model.ClassType<T>): T | any {
         if (res.success && classType) {
             return this.jsc.deserialize(res.result, classType);
         }
         else if (res.success && !classType) {
             return res.result;
         }
+        else if (
+            res.error.status === 401 ||
+            res.error.status === 403 ||
+            res.error.status === 404
+        ) {
+            throw new Error ('URL Not Found');
+        }
         else {
-            throw res.message;
+            throw new Error (res.message);
         }
     };
     private responseVoidHandler(res) {

@@ -1,25 +1,15 @@
 import {JsonObject, JsonProperty, Any} from 'json2typescript';
 
-export class ApiResponse {
-    @JsonProperty("success", Boolean)
-    success: Boolean = undefined;
-
-    @JsonProperty("message", String)
-    message: String = undefined;
-
-    
-    @JsonProperty("result", Any)
-    result: any = undefined;
-    
-    // classType: ClassType<T>;
-    // constructor(success:boolean, message: String,  result: T)
-    // {
-    //     //Console.WriteLine("api {0}", result);
-    //     this.success = success;
-    //     this.message = message;
-    //     this.result = result;
-    // }
+export class ApiResponseError {
+    messgae: string = null;
+    name: string = null;
+    type: string = null;
+    statusText: string = null;
+    status: number = null;
 }
-
-
-
+export class ApiResponse {
+    success: Boolean = false;
+    message: string = '';
+    result: any = null;
+    error: ApiResponseError = {} as ApiResponseError;
+}

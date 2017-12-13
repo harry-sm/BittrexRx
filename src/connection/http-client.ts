@@ -4,36 +4,31 @@ import { Observable, Subscriber } from 'rxjs';
 import * as Model from '../model/';
 import { JsonObject, JsonProperty, Any } from 'json2typescript';
 import { CloudflareAuthenticator } from "./cloudflare-authenticator";
+import { ApiResponse } from '../model/';
 
 export class HttpClient {
-    private _request(url: string, options: any = {}): Observable<any> {
-        return Observable.create(function (observer: Subscriber<any>) {
-            fetch(url, options)
-                .then(res => {
-                    return res.json()
-                        .then(json => {
-                            observer.next(json);
-                            return json;
-                        }).catch(error => {
+    private _request(url: string, options: any = {}): Observable<ApiResponse> {
+        let response: ApiResponse = new ApiResponse();
 
-                            let errorObj = {
-                                "status": res.status,
-                                "statusText": res.statusText
-                            };
-                            let err = Object.assign(errorObj, error);
-
-                            observer.error(err);
-                            return err;
-                        });
-                })
-                .then(() => {
-                    observer.complete();
-                });
-        });
+        let promise = fetch(url, options)
+            .then(res => {
+                return res.json()
+                    .then((json: ApiResponse) => {
+                        return Object.assign(response, json);
+                    }).catch( error => {
+                        let resObj = {
+                            status: res.status,
+                            statusText: res.statusText,
+                            url: res.url
+                        };
+                        Object.assign(response.error, resObj, error);
+                        return response;
+                    });
+            });
+        return Observable.fromPromise(promise);
     }
 
-    // : Observable<Response>
-    request(url: string, options?): Observable<any> {
+    request(url: string, options?): Observable<ApiResponse> {
         return Observable.create((observer: Subscriber<any>) => {
             CloudflareAuthenticator.init().getCredentials()
                 .subscribe(data => {
