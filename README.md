@@ -339,7 +339,7 @@ bittrexRx.getOrderBook('BTC-LTC')
 }
 ```
 
-### bittrexRx.getOrderBuyBook(market: string)
+### bittrexRx.getBuyOrderBook(market: string)
 Fetches buy orders from the order book for a specific market.
 
 #### Parameters
@@ -353,7 +353,7 @@ Fetches buy orders from the order book for a specific market.
 
 #### Example
 ```js
-bittrexRx.getOrderBuyBook('BTC-LTC')
+bittrexRx.getBuyOrderBook('BTC-LTC')
     .subscribe(
         data => {
            for (let orderItem of data) {
@@ -370,7 +370,7 @@ bittrexRx.getOrderBuyBook('BTC-LTC')
 ]
 ```
 
-### bittrexRx.getOrderSellBook(market: string)
+### bittrexRx.getSellOrderBook(market: string)
 Fetches sell orders from the order book for a specific market.
 
 #### Parameters
@@ -384,7 +384,7 @@ Fetches sell orders from the order book for a specific market.
 
 #### Example
 ```js
-bittrexRx.getOrderSellBook('BTC-LTC')
+bittrexRx.getSellOrderBook('BTC-LTC')
     .subscribe(
         data => {
            for (let orderItem of data) {
@@ -440,7 +440,7 @@ bittrexRx.getMarketHistory('BTC-LTC')
 ]
 ```
 
-### bittrexRx.getCandle(market: string, tickIntervalType: TickIntervalValue)
+### bittrexRx.getCandles(market: string, tickIntervalType: TickIntervalValue)
 Fetches the OHLC (Open, High, Low, Close) of a market for a given time period.
 
 > **Note:**  This method relies on the v2 API of Bittrex. Very little is known about this version of the API and is subjected to change without warning!
@@ -457,7 +457,7 @@ Fetches the OHLC (Open, High, Low, Close) of a market for a given time period.
 
 #### Example
 ```js
-bittrexRx.getCandle('BTC-LTC', TickIntervalType.oneMin)
+bittrexRx.getCandles('BTC-LTC', TickIntervalType.oneMin)
     .subscribe(
         data => {
             for (let candle of data) {

@@ -243,8 +243,9 @@ export class BittrexRxClient {
     }
 
     // Adderesses the possibility of a nounce collision
-    //https://github.com/khuezy/node.bittrex.api/blob/master/node.bittrex.api.js#L48
+    // https://github.com/khuezy/node.bittrex.api/blob/master/node.bittrex.api.js#L48
     private getNonce() {
+        this.nounceHistory = [];
         let nonce = Math.floor(new Date().getTime() / 1000);
 
         if (this.nounceHistory.indexOf(nonce) > -1) {
@@ -296,7 +297,8 @@ export class BittrexRxClient {
         return this.dispatchRequest(url, queryOptions);
     };
 
-    private catchErrorHandler(res) {
+    private catchErrorHandler(res: Error) {
+        res.stack = "";
         return Observable.throw(res);
     }
     private responseHandler<T>(res: Model.ApiResponse, classType?: Model.ClassType<T>): T | any {
@@ -322,7 +324,7 @@ export class BittrexRxClient {
             return res.success;
         }
         else {
-            throw res.message;
+            throw new Error(res.message);
         }
     };
 }
