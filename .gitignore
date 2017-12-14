@@ -64,5 +64,8 @@ typings/
 # dotenv environment variables file
 .env
 
+# credential settings
+src/tests/api-credentials-settings.ts
+
 
 # End of https://www.gitignore.io/api/node
