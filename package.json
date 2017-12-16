@@ -4,7 +4,7 @@
     "description": "BittrexRx is a rxjs node wrapper for the Bittrex Api",
     "scripts": {
         "build": "tsc",
-        "prepublish": "npm run build",
+        "prepublishOnly": "npm run build",
         "test": "mocha -r ts-node/register ./src/tests/index.ts"
     },
     "main": "build/index.js",

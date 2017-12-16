@@ -92,7 +92,7 @@ The intervalTime operator returns an observable that emits some sequence of data
 #### Example
 ```js
 bittrexRx.getMarkets()
-    intervalTime(5000)
+    .intervalTime(5000)
     .subscribe(
         data => {
             for (let market of data) {
