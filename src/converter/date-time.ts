@@ -7,6 +7,6 @@ export class DateTime implements JsonCustomConvert<Date> {
     }
 
     deserialize(date: string): Date {
-        return new Date(date);
+        return new Date(date + 'Z');
     }
 }
