@@ -46,8 +46,7 @@ export class SocketClient {
 
                 this.wsclient.start();
                 this.wsclient.serviceHandlers.connected = () => {
-                    console.log("Connected!");
-                    console.log("Socket Authenticated!");
+                    console.log("Socket Connected And Authenticated!");
                     this.isDisconnected = false;
                     this.isAuthenticated.next(true);
                 };
@@ -95,6 +94,19 @@ export class SocketClient {
             }
         }
 
+        this.wsclient.serviceHandlers.onerror = (errorMessage, exception, errorData) => {
+            console.log("Error Message: ", errorMessage);
+            console.log("Exception: ", exception);
+            console.log("Error Data: ", errorData);
+            this.wsclient.end();
+        }
+
+        // this.wsclient.serviceHandlers.onUnauthorized = (error) => {
+        //     console.log("onUnauthorized", error);
+        // }
+        // this.wsclient.serviceHandlers.connectionLost = (error) => {
+        //     console.log("connectionLost", error);
+        // }
     }
 
 
@@ -131,7 +143,7 @@ export class SocketClient {
                         this.registerListenerSync(observer, hub, methodName, markets);
                     }
                     else {
-                        console.warn("Socket CloudFalre Authentication Failed!");
+                        console.warn("Socket Authentication Failed!");
                         this.registerListenerSync(observer, hub, methodName, markets);
                     }
                 });

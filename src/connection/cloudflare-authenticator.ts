@@ -1,19 +1,21 @@
 import fetch, { Response, RequestInit, Headers } from 'node-fetch';
 import { Observable, Subscriber } from 'rxjs';
+import * as cloudscraper from 'cloudscraper';
 
 export interface CloudflareData {
     userAgent: string;
     cookie: string;
 }
-
+// cloudscraper.get('https://bittrex.com/', function (error, response, body) {});
 export class CloudflareAuthenticator {
 
     private userAgent: string;
-    private cookieStroage: Observable<string>;
+    private cfCredentials: Observable<Partial<CloudflareData>>;
+
     private static instance: CloudflareAuthenticator;
 
     private constructor() {
-        this.requestUserAgent();
+        // this.requestUserAgent();
         this.cloudFlareRequest();
     }
 
@@ -24,23 +26,7 @@ export class CloudflareAuthenticator {
     }
 
     public getCredentials(): Observable<CloudflareData> {
-        let data: Partial<CloudflareData> = {};
-        return Observable.create((observer: Subscriber<Partial<CloudflareData>>) => {
-            this.cookieStroage.subscribe(cookie => {
-                data = {
-                    cookie: cookie,
-                    userAgent: this.userAgent
-                };
-                observer.next(data);
-            },
-            err => {
-                observer.error(err);
-            },
-            () => {
-                observer.complete();
-            });
-        })
-
+        return this.cloudFlareRequest() as Observable<CloudflareData>;
     }
     private requestUserAgent (){
         // TODO: if necessary
@@ -52,43 +38,31 @@ export class CloudflareAuthenticator {
         this.userAgent = 'Mozilla / 5.0(Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2859.0 Safari / 537.36';
     }
 
-    private getRequestOptions(): Partial<RequestInit>{
-        let requestOpts: Partial<RequestInit> = {};
-        let headers: Headers = new Headers();
-
-        headers.set('User-Agent', this.userAgent);
-
-        requestOpts.compress = true;
-        requestOpts.headers = headers;
-
-        return requestOpts;
-    }
-
     private cloudFlareRequest() {
-
-        if(!this.cookieStroage) {
-            let promise = fetch('https://bittrex.com/', this.getRequestOptions())
-                .then(res => {
-                    return res;
-                }).catch(err => {
-                    return err;
-                    // throw err;
+        if (!this.cfCredentials) {
+            let cfResponse: Observable<any> = Observable.create((observer: Subscriber<any>) => {
+                cloudscraper.get('https://bittrex.com/', function (error, response) {
+                    if (error) {
+                        observer.error(error);
+                    } else {
+                        observer.next(response);
+                    }
                 });
-
-            this.cookieStroage = Observable.fromPromise(promise)
+            });
+            this.cfCredentials = cfResponse
                 //cache cookie
-                .map(this.extractCookie)
+                .map(this.extractData)
                 .publishReplay()
                 .refCount()
-                .catch(k => "");
+                .catch(k => k);
         }
-        return this.cookieStroage;
-    }
 
-    private extractCookie(res: Response) {
-        let cookieData = res.headers.get('set-cookie');
-        let pattern = /__cfduid=([a-zA-Z0-9]+)/;
-        let cookie = pattern.exec(cookieData)[0];
-        return cookie.length > 0 ? cookie : "";
+        return this.cfCredentials;
+    }
+    private extractData(res) {
+        let data: Partial<CloudflareData> = {};
+        data.cookie = res.request.headers['cookie'] || "";
+        data.userAgent = res.request.headers["User-Agent"] || "";
+        return data;
     }
 }
