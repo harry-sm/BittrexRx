@@ -1,16 +1,16 @@
-import fetch, { Response, RequestInit, Headers } from 'node-fetch';
 import { Observable, Subscriber } from 'rxjs';
 import * as cloudscraper from 'cloudscraper';
+import { Logger } from '../helpers/Logger';
+import { LogTypeValue } from '../enum';
 
-export interface CloudflareData {
+export class CloudflareData {
     userAgent: string;
     cookie: string;
 }
-// cloudscraper.get('https://bittrex.com/', function (error, response, body) {});
 export class CloudflareAuthenticator {
 
     private userAgent: string;
-    private cfCredentials: Observable<Partial<CloudflareData>>;
+    private cfCredentials: Observable<CloudflareData>;
 
     private static instance: CloudflareAuthenticator;
 
@@ -41,9 +41,11 @@ export class CloudflareAuthenticator {
     private cloudFlareRequest() {
         if (!this.cfCredentials) {
             let cfResponse: Observable<any> = Observable.create((observer: Subscriber<any>) => {
+                let that = this;
                 cloudscraper.get('https://bittrex.com/', function (error, response) {
                     if (error) {
                         observer.error(error);
+                        Logger.Stream.write(LogTypeValue.Warning, 'Could Not Access CloudFlare');
                     } else {
                         observer.next(response);
                     }
@@ -53,16 +55,22 @@ export class CloudflareAuthenticator {
                 //cache cookie
                 .map(this.extractData)
                 .publishReplay()
-                .refCount()
-                .catch(k => k);
+                .refCount();
         }
 
         return this.cfCredentials;
     }
     private extractData(res) {
-        let data: Partial<CloudflareData> = {};
-        data.cookie = res.request.headers['cookie'] || "";
-        data.userAgent = res.request.headers["User-Agent"] || "";
+        let data: CloudflareData = {
+            cookie: res.request.headers['cookie'] || '',
+            userAgent: res.request.headers["User-Agent"] || ''
+        };
+
+        if(data.cookie.length < 2)
+            Logger.Stream.write(LogTypeValue.Warning, 'Could Not Retrieve CloudFlare Cookies');
+        else
+            Logger.Stream.write(LogTypeValue.Debug, 'Retrieved CloudFlare Cookies');
+
         return data;
     }
 }
