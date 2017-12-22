@@ -6,7 +6,7 @@ import { Observable, Subscriber, Subject } from 'rxjs';
 import { SocketClientStatus } from './socket-client-status'
 
 import { LogTypeValue } from '../enum';
-import { Logger } from '../helpers/Logger';
+import { Logger } from '../helpers/logger';
 
 import { CloudflareAuthenticator } from "./cloudflare-authenticator";
 

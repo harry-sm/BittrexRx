@@ -1,6 +1,6 @@
 import { Observable, Subscriber } from 'rxjs';
 import * as cloudscraper from 'cloudscraper';
-import { Logger } from '../helpers/Logger';
+import { Logger } from '../helpers/logger';
 import { LogTypeValue } from '../enum';
 
 export class CloudflareData {

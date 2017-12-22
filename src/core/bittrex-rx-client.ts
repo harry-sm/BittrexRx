@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 
 import * as Model from '../model';
 import { Utilities } from '../helpers/utilities';
-import { Logger } from '../helpers/Logger';
+import { Logger } from '../helpers/logger';
 
 import { HttpClient } from '../connection/http-client';
 import { BittrexRxSocketClient } from './bittrex-rx-socket-client';
