@@ -2,14 +2,16 @@ import * as crypto from 'crypto';
 import { Observable } from 'rxjs';
 
 import * as Model from '../model';
-import { Utilities } from './utilities';
+import { Utilities } from '../helpers/utilities';
+import { Logger } from '../helpers/Logger';
 
 import { HttpClient } from '../connection/http-client';
 import { BittrexRxSocketClient } from './bittrex-rx-socket-client';
-import { OrderConditionalTypeValue, TickIntervalValue, TimeInEffectValue, MarketOrderValue } from '../enum';
+import { OrderConditionalTypeValue, TickIntervalValue, TimeInEffectValue, MarketOrderValue, LogTypeValue } from '../enum';
 
 import { JsonConvert } from 'json2typescript';
 import { CloudflareAuthenticator } from "../connection/cloudflare-authenticator";
+import { BittrexRxConfig } from '../model/BittrexRxConfig';
 
 
 interface ApiCredentials {
@@ -43,9 +45,14 @@ export class BittrexRxClient {
         return new BittrexRxSocketClient();
     }
 
-    config(baseUrl){
+    config(baseUrl) {
         this.baseUrl = baseUrl;
     }
+
+    // config(settings: BittrexRxConfig) {
+    //     this.baseUrl = (settings.baseUrl) ? settings.baseUrl : this.baseUrl;
+    //     Logger.create(settings.logType, settings.logWriter);
+    // }
 
     apiCredentials(key: string, secret: string) {
         this.credentials = {
@@ -264,9 +271,15 @@ export class BittrexRxClient {
     }
 
     private dispatchRequest(url: string, queryOptions, useCredentials: Boolean = false) {
-        if (this.credentials.key === undefined && useCredentials) {
+        if (
+            this.credentials.key === undefined &&
+            this.credentials.secret === undefined &&
+            useCredentials
+        ) {
             return Observable.throw(new Error('No API Key Found. Please Set API Credentials.'));
         }
+
+        Logger.Stream.write(LogTypeValue.Debug, `Requesting data from ${url}`)
 
         let opts = this.requestOptions;
         let queryObject = queryOptions;

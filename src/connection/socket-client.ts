@@ -2,8 +2,12 @@ import * as jsonic from 'jsonic';
 import * as signalR from 'signalr-client';
 import fetch from 'node-fetch';
 
-import { Observable, Subscriber, Subject, ConnectableObservable } from 'rxjs';
+import { Observable, Subscriber, Subject } from 'rxjs';
 import { SocketClientStatus } from './socket-client-status'
+
+import { LogTypeValue } from '../enum';
+import { Logger } from '../helpers/Logger';
+
 import { CloudflareAuthenticator } from "./cloudflare-authenticator";
 
 
@@ -46,7 +50,7 @@ export class SocketClient {
 
                 this.wsclient.start();
                 this.wsclient.serviceHandlers.connected = () => {
-                    console.log("Socket Connected And Authenticated!");
+                    Logger.Stream.write(LogTypeValue.Debug, 'Socket Connected And Authenticated!');
                     this.isDisconnected = false;
                     this.isAuthenticated.next(true);
                 };
@@ -54,7 +58,7 @@ export class SocketClient {
             err => {
                 this.wsclient.start();
                 this.wsclient.serviceHandlers.connected = () => {
-                    console.log("Connected!!");
+                    Logger.Stream.write(LogTypeValue.Warning, 'Socket Connected But Not Authenticated!');
                     this.isDisconnected = false;
                     this.isAuthenticated.next(false);
                 };
@@ -64,12 +68,12 @@ export class SocketClient {
             });
 
         this.wsclient.serviceHandlers.bound = () => {
-            console.log('Socket Bound');
+            Logger.Stream.write(LogTypeValue.Debug, 'Socket Bound');
         }
         this.wsclient.serviceHandlers.reconnecting = (retryData) => {
             this.isDisconnected = true;
             if (!this.isReconnecting){
-                console.log("Reconnecting...");
+                Logger.Stream.write(LogTypeValue.Debug, "Reconnecting...");
                 this.isReconnecting = true;
                 this.constructorAsync(this.baseUrl, this.hubs);
             }
@@ -79,7 +83,7 @@ export class SocketClient {
         this.wsclient.serviceHandlers.disconnected = () => {
             this.isDisconnected = true;
             if (!this.isReconnecting) {
-                console.log('Restarting Connection...');
+                Logger.Stream.write(LogTypeValue.Debug, 'Restarting Connection...');
                 this.isReconnecting = true;
                 this.constructorAsync(this.baseUrl, this.hubs);
             }
@@ -88,17 +92,21 @@ export class SocketClient {
         this.wsclient.serviceHandlers.bindingError = () => {
             this.isDisconnected = true;
             if (!this.isReconnecting) {
-                console.log('Error Restarting Connection...');
+                Logger.Stream.write(LogTypeValue.Error, 'Error Restarting Connection...');
                 this.isReconnecting = true;
                 this.constructorAsync(this.baseUrl, this.hubs);
             }
         }
 
         this.wsclient.serviceHandlers.onerror = (errorMessage, exception, errorData) => {
-            console.log("Error Message: ", errorMessage);
-            console.log("Exception: ", exception);
-            console.log("Error Data: ", errorData);
+            Logger.Stream.write(
+                LogTypeValue.Error,
+                `${errorMessage ? errorMessage : '' } ${exception ? exception : ''} ${errorData ? errorData : ''}`);
             this.wsclient.end();
+        }
+
+        this.wsclient.serviceHandlers.disconnected = () => {
+            Logger.Stream.write(LogTypeValue.Debug, 'Socket Disconnected');
         }
 
         // this.wsclient.serviceHandlers.onUnauthorized = (error) => {
@@ -126,7 +134,7 @@ export class SocketClient {
                     if (!this.isDisconnected && !this.isReconnecting) {
                         this.isDisconnected = true;
                         this.isReconnecting = true;
-                        console.log('Connection Timeout, Restarting...');
+                        Logger.Stream.write(LogTypeValue.Debug, 'Connection Timeout, Restarting...');
                         this.constructorAsync(this.baseUrl, this.hubs);
                     }
                 }, 60000);
@@ -143,7 +151,6 @@ export class SocketClient {
                         this.registerListenerSync(observer, hub, methodName, markets);
                     }
                     else {
-                        console.warn("Socket Authentication Failed!");
                         this.registerListenerSync(observer, hub, methodName, markets);
                     }
                 });
