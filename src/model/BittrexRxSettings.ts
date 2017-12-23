@@ -1,6 +1,6 @@
 import { LogTypeValue } from '../enum/LogTypeValue';
 
-export class BittrexRxConfig {
+export class BittrexRxSettings {
     baseUrl?: string;
     logType?: LogTypeValue;
     logWriter?: Function

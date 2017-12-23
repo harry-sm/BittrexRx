@@ -23,5 +23,6 @@ export * from './SummaryState';
 
 export * from './ClassType';
 export * from './WithdrawalTransaction';
+export * from './BittrexRxSettings';
 
 

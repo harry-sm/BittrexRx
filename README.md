@@ -11,6 +11,34 @@ BittrexRx is an Reactive library that was built with TypeScript for the [Bittrex
 ## Basic Usage
 `npm install bittrex-rx --save`
 
+Include in your project
+
+```js
+import {
+    BittrexRxClient,
+    OrderConditionalTypeValue,
+    TickIntervalValue,
+    TimeInEffectValue,
+    MarketOrderValue,
+    Model,
+    LogTypeValue
+} from "bittrex-rx";
+```
+
+> **Note**: To gain access to rxjs operators such as `map()`, `flatMap()`, `filter()`, you will need to include [rxjs](https://github.com/ReactiveX/RxJS) in your project.
+
+Install
+
+`npm install rxjs`
+
+Include in your project
+
+```js
+import "rxjs";
+```
+
+
+
 ## Advance Usage
 
 Fetch the project via git:
@@ -33,9 +61,45 @@ import {
     TickIntervalValue,
     TimeInEffectValue,
     MarketOrderValue,
-    Model
+    Model,
+    LogTypeValue
 } from '<path to project>';
 ```
+
+
+## BittrexRx Settings
+
+### settings(settings: BittrexRxSettings)
+
+Sets settings for BittrexRx methods behaviors.
+
+#### Parameters
+
+| Parameter | Type              | Example                                  | Description                              |
+| --------- | ----------------- | ---------------------------------------- | ---------------------------------------- |
+| settings  | BittrexRxSettings | {<br /> baseUrl:  'https://bittrex.com/api/',<br /> logType:  LogTypeValue.Debug,<br /> logWriter: console.log<br />} | baseUrl: This is the entry point use to connect to the API server.<br />logType: The type of logs that should be displayed.<br /><ul><li>Debug: writes all log messages.</li><li>Error: writes only error messages.</li><li>Warning: writes only warning messages.</li></ul> - logWriter:  The function that takes a single string argument and outputs the log message. |
+
+#### Example
+
+```js
+import {
+    BittrexRxClient,
+    OrderConditionalTypeValue,
+    TickIntervalValue,
+    TimeInEffectValue,
+    MarketOrderValue,
+    Model,
+    LogTypeValue
+} from "bittrex-rx";
+
+bittrexRx.settings({
+  logType: LogTypeValue.Warning,
+  logWriter: console.log
+});
+```
+
+
+
 ### Api Credentials
 
 Sign into your Bittrex account go to settings then API keys and add new key.
@@ -59,7 +123,8 @@ import {
     TickIntervalValue,
     TimeInEffectValue,
     MarketOrderValue,
-    Model
+    Model,
+    LogTypeValue
 } from 'bittrex-rx';
 
 let bittrexRx = new BittrexClient();

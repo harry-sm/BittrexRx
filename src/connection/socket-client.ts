@@ -128,6 +128,7 @@ export class SocketClient {
         return Observable.create((observer: Subscriber<any>) => {
             this.wsclient.serviceHandlers.messageReceived = (message) => {
                 observer.next(jsonic(message.utf8Data));
+
                 // If no data is received after 60 seconds the connection is restarted
                 clearTimeout(connectionRestartTimer);
                 connectionRestartTimer = setTimeout(() => {

@@ -11,7 +11,7 @@ import { OrderConditionalTypeValue, TickIntervalValue, TimeInEffectValue, Market
 
 import { JsonConvert } from 'json2typescript';
 import { CloudflareAuthenticator } from "../connection/cloudflare-authenticator";
-import { BittrexRxConfig } from '../model/BittrexRxConfig';
+import { BittrexRxSettings } from '../model/BittrexRxSettings';
 
 
 interface ApiCredentials {
@@ -45,14 +45,14 @@ export class BittrexRxClient {
         return new BittrexRxSocketClient();
     }
 
-    config(baseUrl) {
-        this.baseUrl = baseUrl;
-    }
-
-    // config(settings: BittrexRxConfig) {
-    //     this.baseUrl = (settings.baseUrl) ? settings.baseUrl : this.baseUrl;
-    //     Logger.create(settings.logType, settings.logWriter);
+    // config(baseUrl) {
+    //     this.baseUrl = baseUrl;
     // }
+
+    settings(settings: Model.BittrexRxSettings) {
+        this.baseUrl = (settings.baseUrl) ? settings.baseUrl : this.baseUrl;
+        Logger.create(settings.logType, settings.logWriter);
+    }
 
     apiCredentials(key: string, secret: string) {
         this.credentials = {

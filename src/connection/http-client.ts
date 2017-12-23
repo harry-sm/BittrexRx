@@ -1,10 +1,12 @@
-import fetch, { Response, RequestInit } from 'node-fetch';
 import { Observable, Subscriber } from 'rxjs';
+import fetch, { Response, RequestInit } from 'node-fetch';
 
-import * as Model from '../model/';
+import { ApiResponse } from '../model/';
 import { JsonObject, JsonProperty, Any } from 'json2typescript';
 import { CloudflareAuthenticator } from "./cloudflare-authenticator";
-import { ApiResponse } from '../model/';
+
+import { LogTypeValue } from '../enum';
+import { Logger } from '../helpers/logger';
 
 export class HttpClient {
     private _request(url: string, options: any = {}): Observable<ApiResponse> {
@@ -37,11 +39,11 @@ export class HttpClient {
                     options.headers['User-Agent'] = data.userAgent;
                     options.headers['cookie'] = data.cookie;
 
-                    // console.log("HTTP Authenticated!");
+                    Logger.Stream.write(LogTypeValue.Debug, "HTTP Request Authenticated!");
                     this._request(url, options).subscribe(k => observer.next(k));
                 },
                 err => {
-                    // console.warn("HTTP CloudFalre Authentication Failed!");
+                    Logger.Stream.write(LogTypeValue.Warning, 'HTTP Request Authentication Failed!');
                     this._request(url, options).subscribe(k => observer.next(k));
                 });
         });
