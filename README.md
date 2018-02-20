@@ -77,7 +77,7 @@ Sets settings for BittrexRx methods behaviors.
 
 | Parameter | Type              | Example                                  | Description                              |
 | --------- | ----------------- | ---------------------------------------- | ---------------------------------------- |
-| settings  | BittrexRxSettings | {<br /> baseUrl:  'https://bittrex.com/api/',<br /> logType:  LogTypeValue.Debug,<br /> logWriter: console.log<br />} | baseUrl: This is the entry point use to connect to the API server.<br />logType: The type of logs that should be displayed.<br /><ul><li>Debug: writes all log messages.</li><li>Error: writes only error messages.</li><li>Warning: writes only warning messages.</li></ul> - logWriter:  The function that takes a single string argument and outputs the log message. |
+| settings  | BittrexRxSettings | {<br /> baseUrl:  'https://bittrex.com/api/',<br /> logType:  LogTypeValue.Debug,<br /> logWriter: console.log<br />} | baseUrl: This is the entry point use to connect to the API server.<br />logType: The type of logs that should be displayed.<br /><ul><li>Debug: writes all log messages.</li><li>Error: writes only error messages.</li><li>Warning: writes only warning messages.</li> <li>logWriter:  The function that takes a single string argument and outputs the log message.</li></ul> |
 
 #### Example
 
@@ -1203,6 +1203,24 @@ bittrexRx.Socket.exchangeState(['BTC-ETH'])
     ]
 }
 ```
+
+### bittrexRx.Socket.close()
+Closes socket connection.
+
+#### Parameters
+
+| Parameter | Type | Example |
+| --------- | ---- | ------- |
+| none      | -    | -       |
+
+#### Return Type
+`Void`
+
+#### Example
+```js
+bittrexRx.Socket.close();
+```
+
 
 ### Websockets ServiceHandlers
 
