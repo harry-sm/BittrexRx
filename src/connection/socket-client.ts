@@ -41,7 +41,7 @@ export class SocketClient {
             hubs,
             12,
             true
-        ); //this.wsclient.state
+        );
 
         this.cfAuth.getCredentials()
             .subscribe((data) => {
@@ -120,6 +120,10 @@ export class SocketClient {
 
     public Status(): SocketClientStatus {
         return new SocketClientStatus(this.wsclient);
+    }
+
+    public close() {
+        this.wsclient.end();
     }
 
     public listener(): Observable<any> {
