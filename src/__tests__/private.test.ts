@@ -7,16 +7,14 @@ import {
     MarketOrderValue,
     Model
 } from '../index'
-import * as chai from "chai";
-const assert = chai.assert;
 import { Observable } from 'rxjs';
 
-import { ApiCredentialsSettings } from "./api-credentials-settings";
+import { ApiCredentialsSettings } from "../helpers/api-credentials-settings";
 
 describe("BitttrexRx Private Methods", () => {
     let bittrexRx: BittrexRxClient;
 
-    before(done => {
+    beforeAll(done => {
         bittrexRx = new BittrexRxClient();
         bittrexRx.apiCredentials(ApiCredentialsSettings.key, ApiCredentialsSettings.secret);
         done();
@@ -26,71 +24,71 @@ describe("BitttrexRx Private Methods", () => {
         it("should respond with an instance of Balance", done => {
             bittrexRx.getBalances()
                 .subscribe(json => {
-                    assert.instanceOf(json[0], Model.Balance);
+                    expect(json[0]).toBeInstanceOf(Model.Balance)
                     done();
                 },
                 done
                 );
-        }).timeout(60000);
+        }, 60000);
     });
 
     describe("#getBalance()", () => {
         it("should respond with an instance of Balance", done => {
             bittrexRx.getBalance('BTC')
                 .subscribe(json => {
-                    assert.instanceOf(json, Model.Balance);
+                    expect(json).toBeInstanceOf(Model.Balance);
                     done();
                 },
                 done
                 );
-        }).timeout(60000);
+        }, 60000);
     });
 
     describe("#getOrderHistory()", () => {
         it("should respond with an instance of OrderHistoryOrderItem", done => {
             bittrexRx.getOrderHistory()
                 .subscribe(json => {
-                    assert.instanceOf(json[0], Model.OrderHistoryOrderItem);
+                    expect(json[0]).toBeInstanceOf(Model.OrderHistoryOrderItem);
                     done();
                 },
                 done
                 );
-        }).timeout(60000);
+        }, 60000);
     });
 
     describe("#getDepositAddress()", () => {
         it("should respond with an instance of DepositAddress", done => {
             bittrexRx.getDepositAddress('BTC')
                 .subscribe(json => {
-                    assert.instanceOf(json, Model.DepositAddress);
+                    expect(json).toBeInstanceOf(Model.DepositAddress);
                     done();
                 },
                 done
                 );
-        }).timeout(60000);
+        }, 60000);
     });
 
     describe("#getDepositHistory()", () => {
         it("should respond with an instance of Transaction", done => {
             bittrexRx.getDepositHistory('BTC')
                 .subscribe(json => {
-                    assert.instanceOf(json[0], Model.Transaction);
+                    expect(json[0]).toBeInstanceOf(Model.Transaction);
                     done();
                 },
                 done
                 );
-        }).timeout(60000);
+        }, 60000);
     });
 
     describe("#getWithdrawalHistory()", () => {
         it("should respond with an instance of WithdrawalTransaction", done => {
             bittrexRx.getWithdrawalHistory('BTC')
                 .subscribe(json => {
-                    assert.instanceOf(json[0], Model.WithdrawalTransaction, 'some issue');
+                    expect(json[0]).toBeInstanceOf(Model.WithdrawalTransaction);
                     done();
                 },
                 done
                 );
-        }).timeout(60000);
+        }, 60000);
     });
 });

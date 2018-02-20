@@ -35,6 +35,10 @@ export class BittrexRxSocketClient {
             .mergeMap((arr) => arr)
     }
 
+    public close() {
+        this.socket.close();
+    }
+
     private convert<T>(data, dataType: Model.ClassType<T>): T {
         let jsc = new JsonConvert();
         jsc.valueCheckingMode = ValueCheckingMode.DISALLOW_NULL; // never allow null
@@ -73,7 +77,7 @@ export class BittrexRxSocketClient {
                     if (res) {
                         this.connectToDataStream()
                             .filter(data => (data && data.length !== 0))
-                            .mergeMap((d: Model.ExchangeState[]) => d)                            
+                            .mergeMap((d: Model.ExchangeState[]) => d)
                             .subscribe(k => observer.next(k));
                     }
                     else {
