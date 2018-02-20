@@ -1,6 +1,6 @@
 {
     "name": "bittrex-rx",
-    "version": "1.2.0",
+    "version": "1.2.1",
     "description": "BittrexRx is a rxjs node wrapper for the Bittrex Api",
     "scripts": {
         "build": "tsc",
