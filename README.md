@@ -20,6 +20,8 @@ import {
     TickIntervalValue,
     TimeInEffectValue,
     MarketOrderValue,
+    OrderTypeValue,
+    FillTypeValue,
     Model,
     LogTypeValue
 } from "bittrex-rx";
@@ -61,6 +63,8 @@ import {
     TickIntervalValue,
     TimeInEffectValue,
     MarketOrderValue,
+    OrderTypeValue,
+    FillTypeValue,
     Model,
     LogTypeValue
 } from '<path to project>';
@@ -123,6 +127,8 @@ import {
     TickIntervalValue,
     TimeInEffectValue,
     MarketOrderValue,
+    OrderTypeValue,
+    FillTypeValue,
     Model,
     LogTypeValue
 } from 'bittrex-rx';
