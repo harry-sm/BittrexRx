@@ -50,17 +50,15 @@ class OrderBookOrderFillsConverter implements JsonCustomConvert<OrderBookOrderFi
 	}
 }
 
-// export interface ExchangeState {  
-//     H: string;
-//     M: string;
-//     A: OrderBookStream[];
-// }
+
 
 export class ExchangeState {
     @JsonProperty('H', String, false)
     H: string = undefined; // Hub
+
     @JsonProperty('M', String, false)
     M: string = undefined; // MethodName
+
     @JsonProperty('A', OrderBookConverter, false)
     A: OrderBookStream[] = undefined;
 }
@@ -68,16 +66,16 @@ export class ExchangeState {
 export class OrderBookStream {
     @JsonProperty('MarketName', String, false)
     MarketName: string = undefined;
-    
+
     @JsonProperty('Nounce', Number, false)
     Nounce: number = undefined;
-    
+
     @JsonProperty('Buys', OrderBookOrderConverter, false)
     Buys: OrderBookOrderStream[] = undefined;
-    
+
     @JsonProperty('Sells', OrderBookOrderConverter, false)
     Sells: OrderBookOrderStream[] = undefined;
-    
+
     @JsonProperty('Fills', OrderBookOrderFillsConverter, false)
     Fills: OrderBookOrderFillsStream[] = undefined;
 }
@@ -85,24 +83,24 @@ export class OrderBookStream {
 export class OrderBookOrderStream {
     @JsonProperty('Type', Number, false)
     Type: number = undefined;
-    
+
     @JsonProperty('Quantity', Number, false)
     Quantity: number = undefined;
-    
+
     @JsonProperty('Rate', Number, false)
     Rate: number = undefined;
 }
 export class OrderBookOrderFillsStream {
-    
+
     @JsonProperty('OrderType', String, false)
     OrderType: string = undefined;
-    
+
     @JsonProperty('Quantity', Number, false)
     Quantity: number = undefined;
-    
+
     @JsonProperty('Rate', Number, false)
     Rate: number = undefined;
-    
+
     @JsonProperty('TimeStamp', DateTime, false)
     TimeStamp: Date = undefined;
 }
