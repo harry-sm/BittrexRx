@@ -1,4 +1,5 @@
 node_modules
 .gitignore
 .editorconfig
-src/tests/api-credentials-settings.ts
+src/helpers/api-credentials-settings.ts
+.env
