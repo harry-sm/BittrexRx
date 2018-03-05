@@ -1,4 +1,6 @@
 # BittrexRx
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/harry-sm/BittrexRx.svg)](https://greenkeeper.io/)
 BittrexRx is an Reactive library that was built with TypeScript for the [Bittrex](https://bittrex.com/) API which runs on the node.js platform. I built this library because I couldn't find any other library that uses [rxjs](https://github.com/Reactive-Extensions/RxJS). I have also built a Reactive library for the .NET platform  which can be found [here](https://github.com/harry-sm/BittrexRxSharp).
 
 ---
