@@ -4,8 +4,10 @@ BittrexRx is an Reactive library that was built with TypeScript for the [Bittrex
 
 ---
 [![npm version](https://badge.fury.io/js/bittrex-rx.svg)](https://badge.fury.io/js/bittrex-rx)
+[![npm downloads](https://img.shields.io/npm/dt/bittrex-rx.svg)](https://www.npmjs.com/package/bittrex-rx)
 [![Build Status](https://api.travis-ci.org/harry-sm/BittrexRx.svg?branch=master)](https://travis-ci.org/harry-sm/BittrexRx)
 [![Greenkeeper badge](https://badges.greenkeeper.io/harry-sm/BittrexRx.svg)](https://greenkeeper.io/)
+[![David](https://img.shields.io/david/harry-sm/BittrexRx.svg)](https://github.com/harry-sm/BittrexRx)
 
 ---
 
