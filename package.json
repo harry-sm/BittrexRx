@@ -1,69 +1,71 @@
 {
-    "name": "bittrex-rx",
-    "version": "1.2.1",
-    "description": "BittrexRx is a rxjs node wrapper for the Bittrex Api",
-    "scripts": {
-        "build": "tsc",
-        "prepublishOnly": "npm run build",
-        "test": "node -r dotenv/config node_modules/jest/bin/jest --runInBand"
-    },
-    "jest": {
-        "moduleFileExtensions": [
-            "ts",
-            "tsx",
-            "js"
-        ],
-        "transform": {
-            "\\.(ts|tsx)$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
-        },
-        "testRegex": "/__tests__/.*\\.(ts|tsx|js)$"
-    },
-    "main": "build/index.js",
-    "types": "build/index.d.ts",
-    "author": "Rojay Simpson <harrysmith1991@gmail.com>",
-    "license": "MIT",
-    "homepage": "https://github.com/harry-sm/BittrexRx#readme",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/harry-sm/BittrexRx.git"
-    },
-    "engines": {
-        "node": "8.x.x"
-    },
-    "keywords": [
-        "bittrex",
-        "api",
-        "client",
-        "nodejs",
-        "typescript",
-        "rxjs",
-        "observable",
-        "cryptocurrency",
-        "bitcoin",
-        "altcoin",
-        "exchange"
-    ],
-    "bugs": {
-        "url": "https://github.com/harry-sm/BittrexRx/issues"
-    },
-    "dependencies": {
-        "@types/node": "^9.4.6",
-        "cloudscraper": "^1.4.1",
-        "json2typescript": "^1.0.5",
-        "jsonic": "^0.3.0",
-        "node-fetch": "^2.1.1",
-        "rxjs": "^5.5.2",
-        "signalr-client": "0.0.17"
-    },
-    "devDependencies": {
-        "@types/jest": "^22.1.3",
-        "@types/node-fetch": "^1.6.7",
-        "@types/signalr": "^2.2.34",
-        "dotenv": "^5.0.1",
-        "jest": "^22.3.0",
-        "jest-cli": "^22.3.0",
-        "ts-jest": "^22.0.4",
-        "ts-node": "^5.0.1",
-        "typescript": "^2.6.1"
-    }
+	"name": "bittrex-rx",
+	"version": "1.2.1",
+	"description": "BittrexRx is a rxjs node wrapper for the Bittrex Api",
+	"scripts": {
+		"build": "tsc",
+		"prepublishOnly": "npm run build",
+		"test": "node -r dotenv/config node_modules/jest/bin/jest --runInBand",
+		"lint": "tslint --project tsconfig.json src/**/*.ts"
+	},
+	"jest": {
+		"moduleFileExtensions": [
+			"ts",
+			"tsx",
+			"js"
+		],
+		"transform": {
+			"\\.(ts|tsx)$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+		},
+		"testRegex": "/__tests__/.*\\.(ts|tsx|js)$"
+	},
+	"main": "build/index.js",
+	"types": "build/index.d.ts",
+	"author": "Rojay Simpson <harrysmith1991@gmail.com>",
+	"license": "MIT",
+	"homepage": "https://github.com/harry-sm/BittrexRx#readme",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/harry-sm/BittrexRx.git"
+	},
+	"engines": {
+		"node": ">= 8.0.0"
+	},
+	"keywords": [
+		"bittrex",
+		"api",
+		"client",
+		"nodejs",
+		"typescript",
+		"rxjs",
+		"observable",
+		"cryptocurrency",
+		"bitcoin",
+		"altcoin",
+		"exchange"
+	],
+	"bugs": {
+		"url": "https://github.com/harry-sm/BittrexRx/issues"
+	},
+	"dependencies": {
+		"@types/node": "^9.4.6",
+		"cloudscraper": "^1.4.1",
+		"json2typescript": "^1.0.5",
+		"jsonic": "^0.3.0",
+		"node-fetch": "^2.1.1",
+		"rxjs": "^5.5.2",
+		"signalr-client": "0.0.17"
+	},
+	"devDependencies": {
+		"@types/jest": "^22.1.3",
+		"@types/node-fetch": "^1.6.7",
+		"@types/signalr": "^2.2.34",
+		"dotenv": "^5.0.1",
+		"jest": "^22.3.0",
+		"jest-cli": "^22.3.0",
+		"ts-jest": "^22.0.4",
+		"ts-node": "^5.0.1",
+		"tslint": "^5.9.1",
+		"typescript": "^2.6.1"
+	}
 }
