@@ -1,7 +1,7 @@
 import { LogTypeValue } from '../enum/LogTypeValue';
 
 export class BittrexRxSettings {
-    baseUrl?: string;
-    logType?: LogTypeValue;
-    logWriter?: Function
+	public baseUrl?: string;
+	public logType?: LogTypeValue;
+	public logWriter?: (...args) => any;
 }

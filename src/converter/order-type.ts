@@ -3,11 +3,11 @@ import { OrderTypeValue } from '..';
 
 @JsonConverter
 export class OrderType implements JsonCustomConvert<OrderTypeValue> {
-    serialize(type: OrderTypeValue): string {
-        return OrderTypeValue[type].toString()
-    }
+	public serialize(type: OrderTypeValue): string {
+		return OrderTypeValue[type].toString();
+	}
 
-    deserialize(type: string): OrderTypeValue {
-        return OrderTypeValue[type];
-    }
+	public deserialize(type: string): OrderTypeValue {
+		return OrderTypeValue[type];
+	}
 }

@@ -1,6 +1,6 @@
 export enum LogTypeValue {
-    Debug,
-    Error,
-    Warning,
-    None
+	Debug,
+	Error,
+	Warning,
+	None
 }

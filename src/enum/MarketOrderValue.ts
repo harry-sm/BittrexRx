@@ -1,3 +1,3 @@
 export enum MarketOrderValue {
-    LIMIT
+	LIMIT
 }

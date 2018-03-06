@@ -1,37 +1,38 @@
 import { LogTypeValue } from '../enum';
 
+export type CallbackFunction = (...arg) => any;
+
 export class Logger {
-    private logType: LogTypeValue;
-    private logWriter: Function;
-    private static instance: Logger;
+	private static instance: Logger;
 
-    private constructor(logType: LogTypeValue = 3, logWriter?: Function) {
-        this.logType = logType;
-        this.logWriter = logWriter;
-    }
+	private logType: LogTypeValue;
+	private logWriter: CallbackFunction;
 
-    static create(logType: LogTypeValue = LogTypeValue.None, logWriter?: Function) {
-        this.instance = new Logger(logType, logWriter);
-    }
+	private constructor(logType: LogTypeValue = 3, logWriter?: CallbackFunction) {
+		this.logType = logType;
+		this.logWriter = logWriter;
+	}
 
-    static get Stream() {
-        if (!this.instance) {
-            // console.log('Creating logger with default settings');
-            this.create(LogTypeValue.Error, console.log);
-        }
+	public static create(logType: LogTypeValue = LogTypeValue.None, logWriter?: CallbackFunction) {
+		this.instance = new Logger(logType, logWriter);
+	}
 
-        return this.instance;
-    }
+	public static get Stream() {
+		if (!this.instance) {
+			this.create(LogTypeValue.Error, console.log);
+		}
 
-    write(logType: LogTypeValue, message: string) {
-        let output: string = `${LogTypeValue[logType].toString()} : ${message}`;
+		return this.instance;
+	}
 
-        if (this.logType !== LogTypeValue.None) {
-            if (logType === this.logType || this.logType === LogTypeValue.Debug){
-                this.logWriter(output)
-            }
-        }
+	public write(logType: LogTypeValue, message: string) {
+		const output: string = `${LogTypeValue[logType].toString()} : ${message}`;
 
-    }
+		if (this.logType !== LogTypeValue.None) {
+			if (logType === this.logType || this.logType === LogTypeValue.Debug) {
+				this.logWriter(output);
+			}
+		}
+
+	}
 }
-

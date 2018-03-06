@@ -1,52 +1,52 @@
 import { Observable, Subscriber } from 'rxjs';
-import fetch, { Response, RequestInit } from 'node-fetch';
+import fetch, { Response } from 'node-fetch';
 
 import { ApiResponse } from '../model/';
-import { JsonObject, JsonProperty, Any } from 'json2typescript';
-import { CloudflareAuthenticator } from "./cloudflare-authenticator";
+import { CloudflareAuthenticator, CloudflareData } from './cloudflare-authenticator';
 
 import { LogTypeValue } from '../enum';
 import { Logger } from '../helpers/logger';
 
 export class HttpClient {
-    private _request(url: string, options: any = {}): Observable<ApiResponse> {
-        let response: ApiResponse = new ApiResponse();
+	public request(url: string, options?: any): Observable<ApiResponse> {
+		return Observable.create((observer: Subscriber<any>) => {
+			CloudflareAuthenticator.init().getCredentials()
+				.subscribe(
+				(data: CloudflareData) => {
+					options.headers = (options.headers !== undefined) ? options.headers : {};
 
-        let promise = fetch(url, options)
-            .then(res => {
-                return res.json()
-                    .then((json: ApiResponse) => {
-                        return Object.assign(response, json);
-                    }).catch( error => {
-                        let resObj = {
-                            status: res.status,
-                            statusText: res.statusText,
-                            url: res.url
-                        };
-                        Object.assign(response.error, resObj, error);
-                        return response;
-                    });
-            });
-        return Observable.fromPromise(promise);
-    }
+					options.headers['User-Agent'] = data.userAgent;
+					options.headers.cookie = data.cookie;
 
-    request(url: string, options?): Observable<ApiResponse> {
-        return Observable.create((observer: Subscriber<any>) => {
-            CloudflareAuthenticator.init().getCredentials()
-                .subscribe(data => {
-                    options.headers = (options.headers !== undefined) ? options.headers : {};
+					Logger.Stream.write(LogTypeValue.Debug, 'HTTP Request Authenticated!');
+					this._request(url, options).subscribe((k: ApiResponse) => observer.next(k));
+				},
+				(err: any) => {
+					Logger.Stream.write(LogTypeValue.Warning, 'HTTP Request Authentication Failed!');
+					this._request(url, options).subscribe((k: ApiResponse) => observer.next(k));
+				});
+		});
+	}
 
-                    options.headers['User-Agent'] = data.userAgent;
-                    options.headers['cookie'] = data.cookie;
+	private _request(url: string, options: any = {}): Observable<ApiResponse> {
+		const response: ApiResponse = new ApiResponse();
 
-                    Logger.Stream.write(LogTypeValue.Debug, "HTTP Request Authenticated!");
-                    this._request(url, options).subscribe(k => observer.next(k));
-                },
-                err => {
-                    Logger.Stream.write(LogTypeValue.Warning, 'HTTP Request Authentication Failed!');
-                    this._request(url, options).subscribe(k => observer.next(k));
-                });
-        });
-    }
-
+		const promise: Promise<ApiResponse> = fetch(url, options)
+			.then((res: Response) => {
+				return res.json()
+					.then((json: ApiResponse) => {
+						return Object.assign(response, json);
+					})
+					.catch((error: any) => {
+						const resObj: any = {
+							status: res.status,
+							statusText: res.statusText,
+							url: res.url
+						};
+						Object.assign(response.error, resObj, error);
+						return response;
+					});
+			});
+		return Observable.fromPromise(promise);
+	}
 }

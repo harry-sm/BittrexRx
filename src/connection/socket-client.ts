@@ -1,185 +1,184 @@
 import * as jsonic from 'jsonic';
 import * as signalR from 'signalr-client';
-import fetch from 'node-fetch';
 
 import { Observable, Subscriber, Subject } from 'rxjs';
-import { SocketClientStatus } from './socket-client-status'
+import { SocketClientStatus } from './socket-client-status';
 
 import { LogTypeValue } from '../enum';
 import { Logger } from '../helpers/logger';
 
-import { CloudflareAuthenticator } from "./cloudflare-authenticator";
-
+import { CloudflareAuthenticator, CloudflareData } from './cloudflare-authenticator';
 
 export class SocketClient {
-    private wsclient: signalR.client;
-    private cfAuth: CloudflareAuthenticator;
-    private isDisconnected: boolean = false;
-    private isReconnecting: boolean = false;
+	private wsclient: signalR.client;
+	private cfAuth: CloudflareAuthenticator;
+	private isDisconnected: boolean = false;
+	private isReconnecting: boolean = false;
 
-    private isAuthenticated: Subject<Boolean> = new Subject<Boolean>();
+	private isAuthenticated: Subject<boolean> = new Subject<boolean>();
 
-    private baseUrl: string;
-    private hubs: string[];
+	private baseUrl: string;
+	private hubs: string[];
 
-    constructor(baseUrl?: string, hubs?: string[]) {
-        this.cfAuth = CloudflareAuthenticator.init();
-        this.hubs = hubs;
-        this.baseUrl = baseUrl;
-        this.constructorAsync(baseUrl, hubs);
-    }
+	constructor(baseUrl?: string, hubs?: string[]) {
+		this.cfAuth = CloudflareAuthenticator.init();
+		this.hubs = hubs;
+		this.baseUrl = baseUrl;
+		this.constructorAsync(baseUrl, hubs);
+	}
 
-    constructorAsync(baseUrl?: string, hubs?: string[]) {
-        // if(this.isDisconnected)
-        //     this.isReconnecting = true;
+	public Status(): SocketClientStatus {
+		return new SocketClientStatus(this.wsclient);
+	}
 
-        //force end of connection.
-        (this.wsclient && this.wsclient.end());
+	public close() {
+		this.wsclient.end();
+	}
 
-        this.wsclient = new signalR.client(
-            baseUrl,
-            hubs,
-            12,
-            true
-        );
+	public listener(): Observable<any> {
+		let connectionRestartTimer: NodeJS.Timer;
 
-        this.cfAuth.getCredentials()
-            .subscribe((data) => {
-                this.wsclient.headers['cookie'] = data.cookie;
-                this.wsclient.headers['User-Agent'] = data.userAgent;
+		return Observable.create((observer: Subscriber<any>) => {
+			this.wsclient.serviceHandlers.messageReceived = (message: any) => {
+				observer.next(jsonic(message.utf8Data));
 
-                this.wsclient.start();
-                this.wsclient.serviceHandlers.connected = () => {
-                    Logger.Stream.write(LogTypeValue.Debug, 'Socket Connected And Authenticated!');
-                    this.isDisconnected = false;
-                    this.isAuthenticated.next(true);
-                };
-            },
-            err => {
-                this.wsclient.start();
-                this.wsclient.serviceHandlers.connected = () => {
-                    Logger.Stream.write(LogTypeValue.Warning, 'Socket Connected But Not Authenticated!');
-                    this.isDisconnected = false;
-                    this.isAuthenticated.next(false);
-                };
-            },
-            () => {
+				// If no data is received after 60 seconds the connection is restarted
+				clearTimeout(connectionRestartTimer);
+				connectionRestartTimer = setTimeout(
+					() => {
+						if (!this.isDisconnected && !this.isReconnecting) {
+							this.isDisconnected = true;
+							this.isReconnecting = true;
+							Logger.Stream.write(LogTypeValue.Debug, 'Connection Timeout, Restarting...');
+							this.constructorAsync(this.baseUrl, this.hubs);
+						}
+					},
+					60000);
+				this.isReconnecting = false;
+			};
+		});
+	}
 
-            });
+	public registerListener(hub: string, methodName: string, markets?: string[]) {
+		return Observable.create((observer: Subscriber<any>) => {
+			this.isAuthenticated
+				.subscribe((check: boolean) => {
+					if (check) {
+						this.registerListenerSync(observer, hub, methodName, markets);
+					} else {
+						this.registerListenerSync(observer, hub, methodName, markets);
+					}
+				});
+		});
+	}
 
-        this.wsclient.serviceHandlers.bound = () => {
-            Logger.Stream.write(LogTypeValue.Debug, 'Socket Bound');
-        }
-        this.wsclient.serviceHandlers.reconnecting = (retryData) => {
-            this.isDisconnected = true;
-            if (!this.isReconnecting){
-                Logger.Stream.write(LogTypeValue.Debug, "Reconnecting...");
-                this.isReconnecting = true;
-                this.constructorAsync(this.baseUrl, this.hubs);
-            }
+	public registerListenerSync(observer: Subscriber<any>, hub: string, methodName: string, markets?: string[]) {
+		if (markets !== undefined) {
+			markets.forEach((market: string) => {
+				this.wsclient.call(hub, methodName, market).done(function(err: any, result: any) {
+					if (err) {
+						observer.error(err);
+					}
+					observer.next(result);
+				});
+			});
+		} else {
+			this.wsclient.call(hub, methodName).done(function(err: any, result: any) {
+				if (err) {
+					observer.error(err);
+				}
+				observer.next(result);
+			});
+		}
+	}
 
-            return true;
-        };
-        this.wsclient.serviceHandlers.disconnected = () => {
-            this.isDisconnected = true;
-            if (!this.isReconnecting) {
-                Logger.Stream.write(LogTypeValue.Debug, 'Restarting Connection...');
-                this.isReconnecting = true;
-                this.constructorAsync(this.baseUrl, this.hubs);
-            }
-        }
+	private constructorAsync(baseUrl?: string, hubs?: string[]) {
+		// if(this.isDisconnected)
+		// 	 this.isReconnecting = true;
 
-        this.wsclient.serviceHandlers.bindingError = () => {
-            this.isDisconnected = true;
-            if (!this.isReconnecting) {
-                Logger.Stream.write(LogTypeValue.Error, 'Error Restarting Connection...');
-                this.isReconnecting = true;
-                this.constructorAsync(this.baseUrl, this.hubs);
-            }
-        }
+		// force end of connection.
+		if (this.wsclient) {
+			this.wsclient.end();
+		}
 
-        this.wsclient.serviceHandlers.onerror = (errorMessage, exception, errorData) => {
-            Logger.Stream.write(
-                LogTypeValue.Error,
-                `${errorMessage ? errorMessage : '' } ${exception ? exception : ''} ${errorData ? errorData : ''}`);
-            this.wsclient.end();
-        }
+		this.wsclient = new signalR.client(
+			baseUrl,
+			hubs,
+			12,
+			true
+		);
 
-        this.wsclient.serviceHandlers.disconnected = () => {
-            Logger.Stream.write(LogTypeValue.Debug, 'Socket Disconnected');
-        }
+		this.cfAuth.getCredentials()
+			.subscribe(
+				(data: CloudflareData) => {
+					this.wsclient.headers.cookie = data.cookie;
+					this.wsclient.headers['User-Agent'] = data.userAgent;
 
-        // this.wsclient.serviceHandlers.onUnauthorized = (error) => {
-        //     console.log("onUnauthorized", error);
-        // }
-        // this.wsclient.serviceHandlers.connectionLost = (error) => {
-        //     console.log("connectionLost", error);
-        // }
-    }
+					this.wsclient.start();
+					this.wsclient.serviceHandlers.connected = () => {
+						Logger.Stream.write(LogTypeValue.Debug, 'Socket Connected And Authenticated!');
+						this.isDisconnected = false;
+						this.isAuthenticated.next(true);
+					};
+				},
+				(err: any) => {
+					this.wsclient.start();
+					this.wsclient.serviceHandlers.connected = () => {
+						Logger.Stream.write(LogTypeValue.Warning, 'Socket Connected But Not Authenticated!');
+						this.isDisconnected = false;
+						this.isAuthenticated.next(false);
+					};
+				});
 
+		this.wsclient.serviceHandlers.bound = () => {
+			Logger.Stream.write(LogTypeValue.Debug, 'Socket Bound');
+		};
 
-    public Status(): SocketClientStatus {
-        return new SocketClientStatus(this.wsclient);
-    }
+		this.wsclient.serviceHandlers.reconnecting = (retryData: any) => {
+			this.isDisconnected = true;
+			if (!this.isReconnecting) {
+				Logger.Stream.write(LogTypeValue.Debug, 'Reconnecting...');
+				this.isReconnecting = true;
+				this.constructorAsync(this.baseUrl, this.hubs);
+			}
 
-    public close() {
-        this.wsclient.end();
-    }
+			return true;
+		};
 
-    public listener(): Observable<any> {
-        let connectionRestartTimer;
+		this.wsclient.serviceHandlers.disconnected = () => {
+			this.isDisconnected = true;
+			if (!this.isReconnecting) {
+				Logger.Stream.write(LogTypeValue.Debug, 'Restarting Connection...');
+				this.isReconnecting = true;
+				this.constructorAsync(this.baseUrl, this.hubs);
+			}
+		};
 
-        return Observable.create((observer: Subscriber<any>) => {
-            this.wsclient.serviceHandlers.messageReceived = (message) => {
-                observer.next(jsonic(message.utf8Data));
+		this.wsclient.serviceHandlers.bindingError = () => {
+			this.isDisconnected = true;
+			if (!this.isReconnecting) {
+				Logger.Stream.write(LogTypeValue.Error, 'Error Restarting Connection...');
+				this.isReconnecting = true;
+				this.constructorAsync(this.baseUrl, this.hubs);
+			}
+		};
 
-                // If no data is received after 60 seconds the connection is restarted
-                clearTimeout(connectionRestartTimer);
-                connectionRestartTimer = setTimeout(() => {
-                    if (!this.isDisconnected && !this.isReconnecting) {
-                        this.isDisconnected = true;
-                        this.isReconnecting = true;
-                        Logger.Stream.write(LogTypeValue.Debug, 'Connection Timeout, Restarting...');
-                        this.constructorAsync(this.baseUrl, this.hubs);
-                    }
-                }, 60000);
-                this.isReconnecting = false;
-            }
-        });
-    }
+		this.wsclient.serviceHandlers.onerror = (errorMessage: any, exception: any, errorData: any) => {
+			Logger.Stream.write(
+				LogTypeValue.Error,
+				`${errorMessage ? errorMessage : ''} ${exception ? exception : ''} ${errorData ? errorData : ''}`);
+			this.wsclient.end();
+		};
 
-    public registerListener(hub: string, methodName: string, markets?: string[]) {
-        return Observable.create((observer: Subscriber<any>) => {
-            this.isAuthenticated
-                .subscribe((check) => {
-                    if (check) {
-                        this.registerListenerSync(observer, hub, methodName, markets);
-                    }
-                    else {
-                        this.registerListenerSync(observer, hub, methodName, markets);
-                    }
-                });
-        });
-    }
+		this.wsclient.serviceHandlers.disconnected = () => {
+			Logger.Stream.write(LogTypeValue.Debug, 'Socket Disconnected');
+		};
 
-    public registerListenerSync(observer: Subscriber<any>, hub: string, methodName: string, markets?: string[]) {
-        if (markets !== undefined) {
-            markets.forEach((market) => {
-                this.wsclient.call(hub, methodName, market).done(function (err, result) {
-                    if (err) {
-                        observer.error(err);
-                    }
-                    observer.next(result);
-                });
-            });
-        }
-        else {
-            this.wsclient.call(hub, methodName).done(function (err, result) {
-                if (err) {
-                    observer.error(err);
-                }
-                observer.next(result);
-            });
-        }
-    }
+		// this.wsclient.serviceHandlers.onUnauthorized = (error) => {
+		// console.log('onUnauthorized', error);
+		// }
+		// this.wsclient.serviceHandlers.connectionLost = (error) => {
+		// console.log('connectionLost', error);
+		// }
+	}
 }
