@@ -52,7 +52,7 @@
 		"cloudscraper": "^1.4.1",
 		"json2typescript": "^1.0.5",
 		"jsonic": "^0.3.0",
-		"node-fetch": "^2.1.1",
+		"node-fetch": "^2.1.2",
 		"rxjs": "^5.5.2",
 		"signalr-client": "0.0.17"
 	},
