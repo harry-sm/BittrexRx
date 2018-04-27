@@ -57,7 +57,7 @@
 	},
 	"devDependencies": {
 		"@types/jest": "22.2.3",
-		"@types/node": "^10.0.0",
+		"@types/node": "10.0.0",
 		"@types/node-fetch": "1.6.9",
 		"@types/signalr": "2.2.35",
 		"dotenv": "5.0.1",
