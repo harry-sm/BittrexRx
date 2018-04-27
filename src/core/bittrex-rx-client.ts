@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 
 import * as Model from '../model';
 import { Utilities } from '../helpers/utilities';
+import nonceManager from '../helpers/NounceManager';
 import { Logger } from '../helpers/logger';
 
 import { HttpClient } from '../connection/http-client';
@@ -29,7 +30,6 @@ export class BittrexRxClient {
 	private requestOptions: any;
 	private jsc: JsonConvert;
 
-	private nounceHistory: number[];
 	private baseUrl: string = 'https://bittrex.com/api/';
 	private credentials: Partial<IApiCredentials> = {};
 
@@ -256,21 +256,6 @@ export class BittrexRxClient {
 			.catch(this.catchErrorHandler);
 	}
 
-	// Adderesses the possibility of a nounce collision
-	// https://github.com/khuezy/node.bittrex.api/blob/master/node.bittrex.api.js#L48
-	private getNonce() {
-		this.nounceHistory = [];
-		const nonce: number = Math.floor(new Date().getTime() / 1000);
-
-		if (this.nounceHistory.indexOf(nonce) > -1) {
-			return this.getNonce();
-		}
-
-		this.nounceHistory = this.nounceHistory.slice(-50);
-		this.nounceHistory.push(nonce);
-		return nonce;
-	}
-
 	private getApiSignature(secret: string, url: string, queryObject: object) {
 		return crypto.createHmac('sha512', this.credentials.secret)
 			.update(`${url}?${Utilities.generateQuerySting(queryObject)}`)
@@ -295,7 +280,7 @@ export class BittrexRxClient {
 			queryObject = Utilities.removeUndefined({
 				...queryOptions,
 				apikey: this.credentials.key,
-				nonce: this.getNonce()
+				nonce: nonceManager.getNonce()
 			});
 
 			opts.headers.apisign = this.getApiSignature(this.credentials.secret, url, queryObject);
