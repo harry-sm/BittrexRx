@@ -16,11 +16,17 @@ describe('BitttrexRx Private Methods', () => {
 	});
 
 	describe('#getBalances()', () => {
-		it('should respond with an instance of Balance', (done: jest.DoneCallback) => {
+		it('should return a list of Balances', (done: jest.DoneCallback) => {
 			bittrexRx.getBalances()
 				.subscribe(
 					(json: Model.Balance[]) => {
-						expect(json[0]).toBeInstanceOf(Model.Balance);
+						expect(json).toEqual(expect.arrayContaining([{
+							Currency: expect.any(String),
+							Balance: expect.any(Number),
+							Available: expect.any(Number),
+							Pending: expect.any(Number),
+							CryptoAddress: expect.any(String)
+						}]));
 						done();
 					},
 					done
@@ -29,24 +35,17 @@ describe('BitttrexRx Private Methods', () => {
 	});
 
 	describe('#getBalance()', () => {
-		it('should respond with an instance of Balance', (done: jest.DoneCallback) => {
+		it('should return the balance of a specific currency', (done: jest.DoneCallback) => {
 			bittrexRx.getBalance('BTC')
 				.subscribe(
 					(json: Model.Balance) => {
-						expect(json).toBeInstanceOf(Model.Balance);
-						done();
-					},
-					done
-				);
-		}, 60000);
-	});
-
-	describe('#getOrderHistory()', () => {
-		it('should respond with an instance of OrderHistoryOrderItem', (done: jest.DoneCallback) => {
-			bittrexRx.getOrderHistory()
-				.subscribe(
-					(json: Model.OrderHistoryOrderItem[]) => {
-						expect(json[0]).toBeInstanceOf(Model.OrderHistoryOrderItem);
+						expect(json).toEqual(expect.objectContaining({
+							Currency: expect.any(String),
+							Balance: expect.any(Number),
+							Available: expect.any(Number),
+							Pending: expect.any(Number),
+							CryptoAddress: expect.any(String)
+						}));
 						done();
 					},
 					done
