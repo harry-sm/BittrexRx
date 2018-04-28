@@ -1,5 +1,24 @@
 {
 	"extends": [
 		"config:base"
+	],
+	"packages": [
+		{
+			"packageNames": [
+				"rxjs"
+			],
+			"allowedVersions": "<6.0.0"
+		},
+		{
+			"packagePattern": "^@types\/.*",
+			"groupName": "Typings",
+			"pinVersions": false,
+			"schedule": [
+				"every weekend"
+			]
+		}
+	],
+	"schedule": [
+		"on the last day of the month"
 	]
 }
