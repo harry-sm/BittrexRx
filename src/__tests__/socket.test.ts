@@ -5,7 +5,7 @@ import {
 
 import { BittrexRxSocketClient } from '../core/bittrex-rx-socket-client';
 
-describe('BitttrexRx Public Methods', () => {
+describe.skip('BitttrexRx Socket Methods', () => {
 	let bittrexRx: BittrexRxClient;
 
 	beforeAll((done: jest.DoneCallback) => {
