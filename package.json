@@ -64,7 +64,7 @@
 		"@types/jest": "22.2.3",
 		"@types/node-fetch": "1.6.9",
 		"@types/signalr": "2.2.35",
-		"dotenv": "5.0.1",
+		"dotenv": "7.0.0",
 		"jest": "22.4.3",
 		"jest-cli": "22.4.3",
 		"ts-jest": "22.4.4",
