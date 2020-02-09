@@ -38,9 +38,9 @@
   version "9.6.7"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-9.6.7.tgz#5f3816d1db2155edcde1b2e3aa5d0e5c520cb564"
 
-"@types/signalr@2.2.35":
-  version "2.2.35"
-  resolved "https://registry.yarnpkg.com/@types/signalr/-/signalr-2.2.35.tgz#88b37702fac663c91a0f655a3577cba2d20fb2f1"
+"@types/signalr@2.2.36":
+  version "2.2.36"
+  resolved "https://registry.yarnpkg.com/@types/signalr/-/signalr-2.2.36.tgz#bfefdfbcb039638a2f72d79bed0bcd080f25ad30"
   dependencies:
     "@types/jquery" "*"
 
