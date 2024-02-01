@@ -52,7 +52,7 @@
 		"url": "https://github.com/harry-sm/BittrexRx/issues"
 	},
 	"dependencies": {
-		"@types/node": "^9.4.6",
+		"@types/node": "^20.0.0",
 		"cloudscraper": "^1.4.1",
 		"json2typescript": "^1.0.5",
 		"jsonic": "^0.3.0",
@@ -61,8 +61,8 @@
 		"signalr-client": "0.0.17"
 	},
 	"devDependencies": {
-		"@types/jest": "22.2.3",
-		"@types/node-fetch": "1.6.9",
+		"@types/jest": "29.5.12",
+		"@types/node-fetch": "2.6.11",
 		"@types/signalr": "2.2.35",
 		"dotenv": "5.0.1",
 		"jest": "22.4.3",
