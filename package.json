@@ -63,7 +63,7 @@
 	"devDependencies": {
 		"@types/jest": "22.2.3",
 		"@types/node-fetch": "1.6.9",
-		"@types/signalr": "2.2.35",
+		"@types/signalr": "2.4.3",
 		"dotenv": "5.0.1",
 		"jest": "22.4.3",
 		"jest-cli": "22.4.3",
